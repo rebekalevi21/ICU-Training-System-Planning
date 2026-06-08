@@ -15,6 +15,12 @@ const INITIAL_INSTRUCTORS = [
     { id: "inst-8", name: "שרה סיני", phone: "052-4713830", specialty: "ניטור המודינמי מתקדם ואקמו", historyCount: 4, monthlyCounts: { "2026-05": 3, "2026-06": 1 } }
 ];
 
+// Force migrate local storage to overwrite old mock instructors list with the new real list
+if (localStorage.getItem("icu_instructors_migrated_v3") !== "true") {
+    localStorage.setItem("icu_instructors", JSON.stringify(INITIAL_INSTRUCTORS));
+    localStorage.setItem("icu_instructors_migrated_v3", "true");
+}
+
 const INITIAL_PROTOCOLS = [
     // Nurse Category
     { id: "prot-1", title: "סילבוס קליטת אחות חדשה בטיפול נמרץ", category: "nurse", desc: "תוכנית הדרכה מלאה בת 12 שבועות לקליטת אחיות חדשות במחלקה, כולל שלבי הערכה שבועיים.", url: "file:///K:/ICU-Protocols/onboarding_syllabus.pdf" },
