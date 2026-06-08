@@ -12,13 +12,14 @@ const INITIAL_INSTRUCTORS = [
     { id: "inst-5", name: "חיה גולן", phone: "0548416959", specialty: "קליטת צוות צעיר, תקשורת במצבי לחץ", historyCount: 4, monthlyCounts: { "2026-05": 2, "2026-06": 2 } },
     { id: "inst-6", name: "זהבית שלהבי", phone: "052-4249285", specialty: "הדרכת על-בסיסי וסטודנטים", historyCount: 3, monthlyCounts: { "2026-05": 2, "2026-06": 1 } },
     { id: "inst-7", name: "הודיה אוזן", phone: "054-8525515", specialty: "נהלי בטיחות ומניעת זיהומים", historyCount: 2, monthlyCounts: { "2026-05": 1, "2026-06": 1 } },
-    { id: "inst-8", name: "שרה סיני", phone: "052-4713830", specialty: "ניטור המודינמי מתקדם ואקמו", historyCount: 4, monthlyCounts: { "2026-05": 3, "2026-06": 1 } }
+    { id: "inst-8", name: "שרה סיני", phone: "052-4713830", specialty: "ניטור המודינמי מתקדם ואקמו", historyCount: 4, monthlyCounts: { "2026-05": 3, "2026-06": 1 } },
+    { id: "inst-9", name: "רבקה אליה", phone: "0543056038", specialty: "מרכזת הדרכה ומדריכה קלינית", historyCount: 4, monthlyCounts: { "2026-05": 2, "2026-06": 2 } }
 ];
 
 // Force migrate local storage to overwrite old mock instructors list with the new real list
-if (localStorage.getItem("icu_instructors_migrated_v3") !== "true") {
+if (localStorage.getItem("icu_instructors_migrated_v4") !== "true") {
     localStorage.setItem("icu_instructors", JSON.stringify(INITIAL_INSTRUCTORS));
-    localStorage.setItem("icu_instructors_migrated_v3", "true");
+    localStorage.setItem("icu_instructors_migrated_v4", "true");
 }
 
 const INITIAL_PROTOCOLS = [
@@ -189,9 +190,9 @@ function loadFromLocalStorage() {
             database.trainees = JSON.parse(storedTrainees);
             database.protocols = JSON.parse(storedProtocols);
             
-            // If the loaded list doesn't contain the real instructor "דסי לוריא", populate with the real list
-            const hasRealInstructors = database.instructors.some(inst => inst.name === "דסי לוריא");
-            if (!hasRealInstructors) {
+            // If the loaded list doesn't contain the real instructor "רבקה אליה", populate with the real list
+            const hasRebecca = database.instructors.some(inst => inst.name === "רבקה אליה");
+            if (!hasRebecca) {
                 database.instructors = [...INITIAL_INSTRUCTORS];
                 saveToLocalStorage();
             } else {
