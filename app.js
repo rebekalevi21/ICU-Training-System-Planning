@@ -5,11 +5,14 @@ const COORDINATOR_PASSCODE = "1234";
 
 // Initial mock data to populate localStorage if empty
 const INITIAL_INSTRUCTORS = [
-    { id: "inst-1", name: "מיכל אהרון", specialty: "הנשמה מתקדמת וטיפול נשימתי, הדריכה בעל-בסיסי", historyCount: 5 },
-    { id: "inst-2", name: "רינת לוין", specialty: "טיפול בטראומה מורכבת ונוירוכירורגיה", historyCount: 3 },
-    { id: "inst-3", name: "יעל שדה", specialty: "קווי עורק, ניטור המודינמי ואקמו", historyCount: 7 },
-    { id: "inst-4", name: "חן כהן", specialty: "ניהול פרמקולוגי ותרופות טיפול נמרץ", historyCount: 2 },
-    { id: "inst-5", name: "טלי גולדברג", specialty: "קליטת צוות צעיר, תקשורת בינאישית במצבי לחץ", historyCount: 4 }
+    { id: "inst-1", name: "דסי לוריא", phone: "0547993209", specialty: "הנשמה מתקדמת, טיפול נשימתי", historyCount: 5, monthlyCounts: { "2026-05": 3, "2026-06": 2 } },
+    { id: "inst-2", name: "שרה אוזן", phone: "0555505252", specialty: "קווי עורק, ניטור המודינמי", historyCount: 3, monthlyCounts: { "2026-05": 1, "2026-06": 2 } },
+    { id: "inst-3", name: "יונת נקי", phone: "0587685094", specialty: "טיפול בטראומה מורכבת ונוירוכירורגיה", historyCount: 7, monthlyCounts: { "2026-05": 4, "2026-06": 3 } },
+    { id: "inst-4", name: "רואן מחאג'נה", phone: "0526619820", specialty: "ניהול פרמקולוגי ותרופות טיפול נמרץ", historyCount: 2, monthlyCounts: { "2026-05": 1, "2026-06": 1 } },
+    { id: "inst-5", name: "חיה גולן", phone: "0548416959", specialty: "קליטת צוות צעיר, תקשורת במצבי לחץ", historyCount: 4, monthlyCounts: { "2026-05": 2, "2026-06": 2 } },
+    { id: "inst-6", name: "זהבית שלהבי", phone: "052-4249285", specialty: "הדרכת על-בסיסי וסטודנטים", historyCount: 3, monthlyCounts: { "2026-05": 2, "2026-06": 1 } },
+    { id: "inst-7", name: "הודיה אוזן", phone: "054-8525515", specialty: "נהלי בטיחות ומניעת זיהומים", historyCount: 2, monthlyCounts: { "2026-05": 1, "2026-06": 1 } },
+    { id: "inst-8", name: "שרה סיני", phone: "052-4713830", specialty: "ניטור המודינמי מתקדם ואקמו", historyCount: 4, monthlyCounts: { "2026-05": 3, "2026-06": 1 } }
 ];
 
 const INITIAL_PROTOCOLS = [
@@ -155,6 +158,12 @@ document.addEventListener("DOMContentLoaded", () => {
         dateInput.value = new Date().toISOString().split('T')[0];
     }
     
+    // Set default month for monthly report select
+    const monthInput = document.getElementById("report-month-select");
+    if (monthInput) {
+        monthInput.value = new Date().toISOString().substring(0, 7); // YYYY-MM
+    }
+    
     // Render initial views
     renderAll();
     
@@ -173,6 +182,23 @@ function loadFromLocalStorage() {
             database.instructors = JSON.parse(storedInstructors);
             database.trainees = JSON.parse(storedTrainees);
             database.protocols = JSON.parse(storedProtocols);
+            
+            // Check if loaded instructors are mock ones and update to real list
+            const hasMockInstructors = database.instructors.some(inst => inst.name === "מיכל אהרון");
+            if (hasMockInstructors) {
+                database.instructors = [...INITIAL_INSTRUCTORS];
+                saveToLocalStorage();
+            } else {
+                // Ensure backward compatibility
+                database.instructors.forEach(inst => {
+                    if (!inst.monthlyCounts) {
+                        inst.monthlyCounts = {};
+                    }
+                    if (!inst.phone) {
+                        inst.phone = "";
+                    }
+                });
+            }
         } else {
             // Setup default data
             database.instructors = [...INITIAL_INSTRUCTORS];
@@ -180,12 +206,31 @@ function loadFromLocalStorage() {
             database.protocols = [...INITIAL_PROTOCOLS];
             saveToLocalStorage();
         }
+        
+        // Load fortnightly placements
+        const storedPlacements = localStorage.getItem("icu_fortnightly_placements");
+        if (storedPlacements) {
+            database.fortnightlyPlacements = JSON.parse(storedPlacements);
+        } else {
+            database.fortnightlyPlacements = [
+                { id: "fn-1", startDate: "2026-06-01", endDate: "2026-06-14", groupName: "קבוצת מכללת מבחר", instructorId: "inst-1", status: "completed" },
+                { id: "fn-2", startDate: "2026-06-15", endDate: "2026-06-28", groupName: "קבוצת אקדמית תל אביב", instructorId: "inst-3", status: "active" },
+                { id: "fn-3", startDate: "2026-06-29", endDate: "2026-07-12", groupName: "קבוצת תל השומר - סבב ב'", instructorId: "inst-5", status: "scheduled" }
+            ];
+        }
+        
+        database.annualPlanUrl = localStorage.getItem("icu_annual_plan_url") || "";
+        database.annualPlanName = localStorage.getItem("icu_annual_plan_name") || "";
+        
     } catch (e) {
         console.error("שגיאה בטעינת נתונים מ-LocalStorage:", e);
         // Fallback to memory
         database.instructors = [...INITIAL_INSTRUCTORS];
         database.trainees = [...INITIAL_TRAINEES];
         database.protocols = [...INITIAL_PROTOCOLS];
+        database.fortnightlyPlacements = [];
+        database.annualPlanUrl = "";
+        database.annualPlanName = "";
     }
 }
 
@@ -195,6 +240,9 @@ function saveToLocalStorage() {
         localStorage.setItem("icu_instructors", JSON.stringify(database.instructors));
         localStorage.setItem("icu_trainees", JSON.stringify(database.trainees));
         localStorage.setItem("icu_protocols", JSON.stringify(database.protocols));
+        localStorage.setItem("icu_fortnightly_placements", JSON.stringify(database.fortnightlyPlacements || []));
+        localStorage.setItem("icu_annual_plan_url", database.annualPlanUrl || "");
+        localStorage.setItem("icu_annual_plan_name", database.annualPlanName || "");
     } catch (e) {
         console.error("שגיאה בשמירת נתונים ל-LocalStorage:", e);
     }
@@ -206,6 +254,7 @@ function renderAll() {
     renderTraineeSelector();
     renderActiveTraineeChecklist();
     renderInstructors();
+    renderFortnightlyPlacements();
     renderProtocols();
     updateRoleVisibility();
 }
@@ -469,6 +518,11 @@ function tryCompleteOrDeleteTrainee(id) {
             const inst = database.instructors.find(i => i.id === trainee.instructorId);
             if (inst) {
                 inst.historyCount = (inst.historyCount || 0) + 1;
+                
+                // Also increment current month
+                const currentMonth = new Date().toISOString().substring(0, 7); // YYYY-MM
+                if (!inst.monthlyCounts) inst.monthlyCounts = {};
+                inst.monthlyCounts[currentMonth] = (inst.monthlyCounts[currentMonth] || 0) + 1;
             }
         }
         
@@ -776,6 +830,7 @@ function renderInstructors() {
         
         tr.innerHTML = `
             <td style="font-weight: 700;">${inst.name}</td>
+            <td style="font-family: var(--font-english); font-weight: 600; direction: ltr; text-align: right;">${inst.phone || "-"}</td>
             <td style="font-size: 0.9rem; color: var(--neutral-gray);">${inst.specialty || "-"}</td>
             <td>${currentTraineesHtml}</td>
             <td class="stats-col" style="font-weight: 800; font-size:1.1rem; color: var(--primary-blue);">${inst.historyCount || 0} הדרכות</td>
@@ -790,6 +845,9 @@ function renderInstructors() {
     });
     
     document.getElementById("stat-busy-instructors").innerText = busyCount;
+    
+    // Render monthly report
+    renderMonthlyReport();
 }
 
 function deleteInstructor(id) {
@@ -995,6 +1053,7 @@ function openAddInstructorModal() {
 
 function saveInstructor() {
     const name = document.getElementById("instructor-name").value;
+    const phone = document.getElementById("instructor-phone").value;
     const specialty = document.getElementById("instructor-specialty").value;
     const historyCount = parseInt(document.getElementById("instructor-history").value) || 0;
     
@@ -1006,8 +1065,10 @@ function saveInstructor() {
     const newInstructor = {
         id: "inst-" + Date.now(),
         name,
+        phone,
         specialty,
-        historyCount
+        historyCount,
+        monthlyCounts: {}
     };
     
     database.instructors.push(newInstructor);
@@ -1112,6 +1173,7 @@ function openEditInstructor(id) {
     
     // Using the same Modal as Add Instructor, changing title and pre-filling
     document.getElementById("instructor-name").value = inst.name;
+    document.getElementById("instructor-phone").value = inst.phone || "";
     document.getElementById("instructor-specialty").value = inst.specialty || "";
     document.getElementById("instructor-history").value = inst.historyCount || 0;
     
@@ -1130,6 +1192,7 @@ function saveEditedInstructor() {
     if (!inst) return;
     
     const name = document.getElementById("instructor-name").value;
+    const phone = document.getElementById("instructor-phone").value;
     const specialty = document.getElementById("instructor-specialty").value;
     const historyCount = parseInt(document.getElementById("instructor-history").value) || 0;
     
@@ -1139,6 +1202,7 @@ function saveEditedInstructor() {
     }
     
     inst.name = name;
+    inst.phone = phone;
     inst.specialty = specialty;
     inst.historyCount = historyCount;
     
@@ -1162,4 +1226,307 @@ function formatDate(dateStr) {
     const parts = dateStr.split('-');
     if (parts.length !== 3) return dateStr;
     return `${parts[2]}/${parts[1]}/${parts[0]}`; // DD/MM/YYYY
+}
+
+// ================= MONTHLY REPORT & ACTIVITY TRACKER =================
+function renderMonthlyReport() {
+    const tableBody = document.getElementById("monthly-report-table-body");
+    if (!tableBody) return;
+    
+    const monthSelect = document.getElementById("report-month-select");
+    if (!monthSelect) return;
+    
+    // Set default month if empty
+    if (!monthSelect.value) {
+        monthSelect.value = new Date().toISOString().substring(0, 7); // YYYY-MM
+    }
+    
+    const selectedMonth = monthSelect.value;
+    tableBody.innerHTML = "";
+    
+    database.instructors.forEach(inst => {
+        const tr = document.createElement("tr");
+        
+        if (!inst.monthlyCounts) inst.monthlyCounts = {};
+        const count = inst.monthlyCounts[selectedMonth] || 0;
+        const total = inst.historyCount || 0;
+        
+        tr.innerHTML = `
+            <td style="font-weight: 700;">${inst.name}</td>
+            <td style="text-align: center; font-weight: 700; font-size: 1.1rem; color: var(--primary-blue);">${count} הדרכות</td>
+            <td>
+                <div style="display: flex; justify-content: center; align-items: center; gap: 12px;">
+                    <button class="btn btn-secondary btn-sm" onclick="adjustMonthlyCount('${inst.id}', -1)" style="padding: 4px 12px; font-weight: 800; font-size: 1.1rem; border-radius: 6px; border: 1px solid var(--neutral-border); background-color: var(--neutral-surface);">-</button>
+                    <span style="font-weight: 800; font-size: 1.2rem; min-width: 36px; text-align: center;">${count}</span>
+                    <button class="btn btn-secondary btn-sm" onclick="adjustMonthlyCount('${inst.id}', 1)" style="padding: 4px 12px; font-weight: 800; font-size: 1.1rem; border-radius: 6px; color: var(--success-green); border-color: var(--success-green); background-color: var(--neutral-surface);">+</button>
+                </div>
+            </td>
+            <td style="text-align: center; font-weight: 800; font-size: 1.1rem; color: var(--neutral-dark);">${total} הדרכות</td>
+        `;
+        tableBody.appendChild(tr);
+    });
+}
+
+function adjustMonthlyCount(instId, amount) {
+    const inst = database.instructors.find(i => i.id === instId);
+    if (!inst) return;
+    
+    const monthSelect = document.getElementById("report-month-select");
+    if (!monthSelect) return;
+    
+    const selectedMonth = monthSelect.value;
+    if (!inst.monthlyCounts) inst.monthlyCounts = {};
+    
+    const currentCount = inst.monthlyCounts[selectedMonth] || 0;
+    const newCount = currentCount + amount;
+    
+    if (newCount < 0) return; // Cannot be less than 0
+    
+    inst.monthlyCounts[selectedMonth] = newCount;
+    
+    // Also adjust overall annual total historyCount
+    inst.historyCount = (inst.historyCount || 0) + amount;
+    if (inst.historyCount < 0) inst.historyCount = 0;
+    
+    saveToLocalStorage();
+    renderAll();
+}
+
+// ================= FORTNIGHTLY PLACEMENTS & ANNUAL PLAN =================
+function renderFortnightlyPlacements() {
+    // Render the annual plan link
+    const linkContainer = document.getElementById("annual-plan-link-container");
+    if (linkContainer) {
+        if (database.annualPlanUrl) {
+            linkContainer.innerHTML = `
+                <a href="${database.annualPlanUrl}" target="_blank" style="color: #c2410c; font-weight: 700; display: inline-flex; align-items: center; gap: 4px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                    קובץ תוכנית שנתית: ${database.annualPlanName || "תוכנית שנתית"}
+                </a>
+            `;
+        } else {
+            linkContainer.innerHTML = `<span style="color: var(--neutral-gray); font-style: italic;">לא קושר קובץ תוכנית שנתית</span>`;
+        }
+    }
+    
+    const tableBody = document.getElementById("fortnightly-placements-table-body");
+    if (!tableBody) return;
+    tableBody.innerHTML = "";
+    
+    if (!database.fortnightlyPlacements) database.fortnightlyPlacements = [];
+    
+    database.fortnightlyPlacements.forEach(placement => {
+        const tr = document.createElement("tr");
+        
+        const instructor = database.instructors.find(i => i.id === placement.instructorId);
+        const instructorName = instructor ? instructor.name : '<span class="text-orange">לא שובצה</span>';
+        
+        const statusLabels = {
+            scheduled: "מתוכנן",
+            active: "פעיל כעת",
+            completed: "הושלם"
+        };
+        const statusClasses = {
+            scheduled: "badge-blue",
+            active: "badge-orange",
+            completed: "badge-green"
+        };
+        
+        tr.innerHTML = `
+            <td style="font-weight: 700; font-family: var(--font-english); direction: ltr; text-align: right;">
+                ${formatDate(placement.startDate)} - ${formatDate(placement.endDate)}
+            </td>
+            <td><strong>${placement.groupName}</strong></td>
+            <td>${instructorName}</td>
+            <td style="text-align: center;"><span class="badge ${statusClasses[placement.status]}">${statusLabels[placement.status]}</span></td>
+            <td>
+                <div style="display:flex; gap: 8px;">
+                    <button class="btn btn-secondary btn-sm" onclick="openEditPlacement('${placement.id}')">עריכה</button>
+                    <button class="btn btn-danger btn-sm" onclick="deletePlacement('${placement.id}')">מחיקה</button>
+                </div>
+            </td>
+        `;
+        tableBody.appendChild(tr);
+    });
+}
+
+function autoCalculateEndDate() {
+    const startDateInput = document.getElementById("placement-start-date");
+    const endDateInput = document.getElementById("placement-end-date");
+    if (!startDateInput || !startDateInput.value || !endDateInput) return;
+    
+    const startDate = new Date(startDateInput.value);
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + 13); // exactly 14 days total
+    
+    endDateInput.value = endDate.toISOString().split('T')[0];
+}
+
+function openUploadPlanModal() {
+    document.getElementById("plan-url").value = database.annualPlanUrl || "";
+    document.getElementById("plan-name").value = database.annualPlanName || "";
+    openModal("modal-upload-plan");
+}
+
+function saveAnnualPlanLink() {
+    const url = document.getElementById("plan-url").value;
+    const name = document.getElementById("plan-name").value;
+    
+    if (!url || !name) {
+        alert("נא למלא את כל השדות.");
+        return;
+    }
+    
+    database.annualPlanUrl = url;
+    database.annualPlanName = name;
+    
+    saveToLocalStorage();
+    closeModal("modal-upload-plan");
+    renderFortnightlyPlacements();
+}
+
+function openAddPlacementModal() {
+    document.getElementById("form-add-placement").reset();
+    document.getElementById("placement-id").value = "";
+    
+    const startInput = document.getElementById("placement-start-date");
+    if (startInput) {
+        startInput.value = new Date().toISOString().split('T')[0];
+        autoCalculateEndDate();
+    }
+    
+    const select = document.getElementById("placement-instructor");
+    select.innerHTML = '<option value="">בחרי מדריכה...</option>';
+    database.instructors.forEach(inst => {
+        const option = document.createElement("option");
+        option.value = inst.id;
+        option.innerText = inst.name;
+        select.appendChild(option);
+    });
+    
+    document.getElementById("placement-modal-title").innerText = "הוספת מחזור שיבוץ דו-שבועי";
+    openModal("modal-add-placement");
+}
+
+function openEditPlacement(id) {
+    const placement = database.fortnightlyPlacements.find(p => p.id === id);
+    if (!placement) return;
+    
+    document.getElementById("placement-id").value = id;
+    document.getElementById("placement-start-date").value = placement.startDate;
+    document.getElementById("placement-end-date").value = placement.endDate;
+    document.getElementById("placement-group-name").value = placement.groupName;
+    document.getElementById("placement-status").value = placement.status;
+    
+    const select = document.getElementById("placement-instructor");
+    select.innerHTML = '<option value="">בחרי מדריכה...</option>';
+    database.instructors.forEach(inst => {
+        const option = document.createElement("option");
+        option.value = inst.id;
+        option.innerText = inst.name;
+        if (inst.id === placement.instructorId) {
+            option.selected = true;
+        }
+        select.appendChild(option);
+    });
+    
+    document.getElementById("placement-modal-title").innerText = "עריכת מחזור שיבוץ דו-שבועי";
+    openModal("modal-add-placement");
+}
+
+function savePlacement() {
+    const id = document.getElementById("placement-id").value;
+    const startDate = document.getElementById("placement-start-date").value;
+    const endDate = document.getElementById("placement-end-date").value;
+    const groupName = document.getElementById("placement-group-name").value;
+    const instructorId = document.getElementById("placement-instructor").value;
+    const status = document.getElementById("placement-status").value;
+    
+    if (!startDate || !endDate || !groupName || !instructorId) {
+        alert("נא למלא את כל שדות החובה ולשבץ מדריכה.");
+        return;
+    }
+    
+    if (id) {
+        const placement = database.fortnightlyPlacements.find(p => p.id === id);
+        if (placement) {
+            const oldStatus = placement.status;
+            placement.startDate = startDate;
+            placement.endDate = endDate;
+            placement.groupName = groupName;
+            
+            if (status === "completed" && oldStatus !== "completed" && instructorId) {
+                const inst = database.instructors.find(i => i.id === instructorId);
+                if (inst) {
+                    inst.historyCount = (inst.historyCount || 0) + 1;
+                    const month = startDate.substring(0, 7);
+                    if (!inst.monthlyCounts) inst.monthlyCounts = {};
+                    inst.monthlyCounts[month] = (inst.monthlyCounts[month] || 0) + 1;
+                }
+            } else if (status !== "completed" && oldStatus === "completed" && instructorId) {
+                const inst = database.instructors.find(i => i.id === instructorId);
+                if (inst) {
+                    inst.historyCount = (inst.historyCount || 0) - 1;
+                    if (inst.historyCount < 0) inst.historyCount = 0;
+                    const month = startDate.substring(0, 7);
+                    if (inst.monthlyCounts && inst.monthlyCounts[month]) {
+                        inst.monthlyCounts[month] = inst.monthlyCounts[month] - 1;
+                        if (inst.monthlyCounts[month] < 0) inst.monthlyCounts[month] = 0;
+                    }
+                }
+            }
+            
+            placement.instructorId = instructorId;
+            placement.status = status;
+        }
+    } else {
+        const newPlacement = {
+            id: "fn-" + Date.now(),
+            startDate,
+            endDate,
+            groupName,
+            instructorId,
+            status
+        };
+        
+        if (status === "completed") {
+            const inst = database.instructors.find(i => i.id === instructorId);
+            if (inst) {
+                inst.historyCount = (inst.historyCount || 0) + 1;
+                const month = startDate.substring(0, 7);
+                if (!inst.monthlyCounts) inst.monthlyCounts = {};
+                inst.monthlyCounts[month] = (inst.monthlyCounts[month] || 0) + 1;
+            }
+        }
+        
+        database.fortnightlyPlacements.push(newPlacement);
+    }
+    
+    saveToLocalStorage();
+    closeModal("modal-add-placement");
+    renderAll();
+}
+
+function deletePlacement(id) {
+    const placement = database.fortnightlyPlacements.find(p => p.id === id);
+    if (!placement) return;
+    
+    if (confirm("האם את בטוחה שברצונך למחוק שיבוץ זה?")) {
+        if (placement.status === "completed" && placement.instructorId) {
+            const inst = database.instructors.find(i => i.id === placement.instructorId);
+            if (inst) {
+                inst.historyCount = (inst.historyCount || 0) - 1;
+                if (inst.historyCount < 0) inst.historyCount = 0;
+                const month = placement.startDate.substring(0, 7);
+                if (inst.monthlyCounts && inst.monthlyCounts[month]) {
+                    inst.monthlyCounts[month] = inst.monthlyCounts[month] - 1;
+                    if (inst.monthlyCounts[month] < 0) inst.monthlyCounts[month] = 0;
+                }
+            }
+        }
+        
+        database.fortnightlyPlacements = database.fortnightlyPlacements.filter(p => p.id !== id);
+        saveToLocalStorage();
+        renderAll();
+    }
 }

@@ -252,6 +252,7 @@
                                         <thead>
                                             <tr>
                                                 <th>שם המדריכה</th>
+                                                <th>טלפון</th>
                                                 <th>התמחות / הערות</th>
                                                 <th>מודרך/ת נוכחי/ת</th>
                                                 <th class="stats-col">הדרכות שבוצעו (מונה שנתי)</th>
@@ -291,6 +292,78 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- Monthly Report Panel -->
+                    <div class="dashboard-panel panel-full" style="margin-top: 24px;">
+                        <div class="panel-header" style="background-color: #f8fafc;">
+                            <div style="display: flex; align-items: center; justify-content: space-between; width: 100%;">
+                                <h3 style="color: var(--primary-navy); font-weight: 800;">דוח הדרכות חודשי ומעקב פעילות</h3>
+                                <div class="month-selector-wrapper" style="display: flex; align-items: center; gap: 8px;">
+                                    <label for="report-month-select" style="font-size: 0.95rem; font-weight: 700; color: var(--neutral-gray);">בחרי חודש דוח:</label>
+                                    <input type="month" id="report-month-select" onchange="renderMonthlyReport()" style="padding: 6px 12px; border: 1px solid var(--neutral-border); border-radius: var(--radius-sm); font-weight: 700; color: var(--neutral-dark); outline: none;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>שם המדריכה</th>
+                                            <th style="text-align: center;">מספר הדרכות בחודש הנבחר</th>
+                                            <th style="text-align: center;">עדכון כמות (חודשי)</th>
+                                            <th style="text-align: center;">סה"כ הדרכות שנתי מצטבר</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="monthly-report-table-body">
+                                        <!-- Dynamically populated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Fortnightly Placements Panel -->
+                    <div class="dashboard-panel panel-full" style="margin-top: 24px; border-color: #fbd5c6;">
+                        <div class="panel-header" style="background-color: #fff7ed; display: flex; align-items: center; justify-content: space-between;">
+                            <div>
+                                <h3 style="color: #c2410c; font-weight: 800;">לוח שיבוץ דו-שבועי ושנתי (התנסות קצרה)</h3>
+                                <p style="font-size: 0.85rem; color: var(--neutral-gray); margin-top: 2px;">חלוקת סטודנטים וקבוצות התנסות לממדריכות במחלקה במחזורים של שבועיים</p>
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                                <!-- Annual Plan Document Link -->
+                                <div id="annual-plan-link-container" style="display: flex; align-items: center; gap: 8px; font-size: 0.9rem;">
+                                    <!-- Populated dynamically -->
+                                </div>
+                                <button class="btn btn-secondary btn-sm" onclick="openUploadPlanModal()" style="border-color: #fed7aa; color: #c2410c; background-color: var(--neutral-surface);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                                    העלאת/קישור תוכנית שנתית
+                                </button>
+                                <button class="btn btn-primary btn-sm" onclick="openAddPlacementModal()" style="background-color: #ea580c; border-color: #ea580c;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    הוספת מחזור שיבוץ
+                                </button>
+                            </div>
+                        </div>
+                        <div class="panel-body">
+                            <div class="table-responsive">
+                                <table class="data-table">
+                                    <thead>
+                                        <tr>
+                                            <th>תאריכי המחזור (שבועיים)</th>
+                                            <th>שם הסטודנט/ית או קבוצה</th>
+                                            <th>מדריכה מלווה</th>
+                                            <th style="text-align: center;">סטטוס</th>
+                                            <th>פעולות</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="fortnightly-placements-table-body">
+                                        <!-- Dynamically populated -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </section>
 
                 <!-- Tab: Protocols -->
@@ -298,6 +371,31 @@
                     <div class="content-header">
                         <h2>נהלים, סילבוסים ותכני הדרכה</h2>
                         <p>גישה מהירה לכלל חומרי הלימוד והפרוטוקולים המחלקתיים</p>
+                    </div>
+
+                    <!-- Coordinator Contact Card -->
+                    <div class="dashboard-panel" style="margin-bottom: 24px; border-color: #bae6fd; background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);">
+                        <div class="panel-body" style="display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 16px;">
+                                <div style="width: 50px; height: 50px; background-color: var(--neutral-surface); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: var(--shadow-sm);">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--primary-blue)" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                                </div>
+                                <div>
+                                    <h3 style="color: var(--primary-navy); font-size: 1.15rem; font-weight: 800; margin: 0;">רבקה אליה</h3>
+                                    <p style="color: var(--neutral-gray); font-size: 0.85rem; font-weight: 700; margin: 2px 0 0 0;">מרכזת הדרכה קלינית | טיפול נמרץ כללי</p>
+                                </div>
+                            </div>
+                            <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--neutral-gray)" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                                    <span style="font-family: var(--font-english); font-weight: 700; color: var(--neutral-dark); direction: ltr;">054-3056038</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--neutral-gray)" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                                    <span style="font-family: var(--font-english); font-weight: 700; color: var(--neutral-dark);">rebekalevi21@gmail.com</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- Filter Bar -->
@@ -408,6 +506,10 @@
                     <div class="form-group">
                         <label for="instructor-name">שם המדריכה:</label>
                         <input type="text" id="instructor-name" required placeholder="למשל: יעל לוי">
+                    </div>
+                    <div class="form-group">
+                        <label for="instructor-phone">מספר טלפון:</label>
+                        <input type="text" id="instructor-phone" placeholder="למשל: 054-7993209">
                     </div>
                     <div class="form-group">
                         <label for="instructor-specialty">תחום התמחות או הערות:</label>
@@ -521,6 +623,77 @@
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeModal('modal-evaluation')">ביטול</button>
                 <button class="btn btn-primary" onclick="saveEvaluation()">שמירת הערכה</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Upload Annual Plan -->
+    <div id="modal-upload-plan" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>קישור לתוכנית שנתית</h3>
+                <button class="modal-close-btn" onclick="closeModal('modal-upload-plan')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-upload-plan" onsubmit="event.preventDefault(); saveAnnualPlanLink();">
+                    <div class="form-group">
+                        <label for="plan-url">קישור למסמך (מחשב מחלקה / כונן משותף / Google Drive):</label>
+                        <input type="text" id="plan-url" required placeholder="למשל: file:///K:/ICU-Schedules/annual_plan_2026.xlsx">
+                    </div>
+                    <div class="form-group">
+                        <label for="plan-name">שם תצוגה של הקובץ:</label>
+                        <input type="text" id="plan-name" required placeholder="למשל: תוכנית שיבוץ שנתית 2026">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-upload-plan')">ביטול</button>
+                <button class="btn btn-primary" onclick="saveAnnualPlanLink()">שמירה</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add/Edit Fortnightly Placement -->
+    <div id="modal-add-placement" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="placement-modal-title">הוספת מחזור שיבוץ דו-שבועי</h3>
+                <button class="modal-close-btn" onclick="closeModal('modal-add-placement')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-add-placement" onsubmit="event.preventDefault(); savePlacement();">
+                    <input type="hidden" id="placement-id">
+                    <div class="form-group">
+                        <label for="placement-start-date">תאריך תחילת מחזור (שבועיים):</label>
+                        <input type="date" id="placement-start-date" required onchange="autoCalculateEndDate()">
+                    </div>
+                    <div class="form-group">
+                        <label for="placement-end-date">תאריך סיום מחזור:</label>
+                        <input type="date" id="placement-end-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="placement-group-name">שם הסטודנט/ית או קבוצת ההתנסות:</label>
+                        <input type="text" id="placement-group-name" required placeholder="למשל: שיר לוי (התנסות קצרה) או קבוצת מכללת מבחר">
+                    </div>
+                    <div class="form-group">
+                        <label for="placement-instructor">מדריכה קלינית מלווה:</label>
+                        <select id="placement-instructor" required>
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="placement-status">סטטוס מחזור:</label>
+                        <select id="placement-status" required>
+                            <option value="scheduled">מתוכנן (טרם החל)</option>
+                            <option value="active">פעיל כעת</option>
+                            <option value="completed">הושלם (ההדרכה בוצעה)</option>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-add-placement')">ביטול</button>
+                <button class="btn btn-primary" onclick="savePlacement()">שמירה</button>
             </div>
         </div>
     </div>
