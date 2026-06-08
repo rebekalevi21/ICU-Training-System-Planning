@@ -45,20 +45,86 @@ const INITIAL_PROTOCOLS = [
 // Checklists Templates for each track
 const CHECKLIST_TEMPLATES = {
     nurse: {
-        "אוריאנטציה והכרות": [
-            { id: "nurse-1", title: "מבנה הפיזי של המחלקה", desc: "סיור במחלקה, אזורי אחסון ציוד (חדר נקי, חדר מלוכלך), בית מרקחת ומיקום ציוד חירום." },
-            { id: "nurse-2", title: "נהלי בטיחות ומניעת זיהומים", desc: "בידודים (מגע, טיפתי, נשימתי), שטיפת ידיים, שימוש במיגון אישי והשלכת פסולת רפואית." },
-            { id: "nurse-3", title: "עגלת החייאה ודפיברילטור", desc: "מיקום עגלות החייאה, הרכב מגירות תרופות, בדיקה יומית של דפיברילטור והפעלה מהירה." }
+        "נושאים ונהלים (שבוע 1 - חודש 1)": [
+            { id: "nurse-1", title: "1. סודיות רפואית", desc: "שמירה על סודיות רפואית ופרטיות המטופלים." },
+            { id: "nurse-2", title: "2. זיהוי מטופל", desc: "מזהה ומציגה את המטופל ע״פ הנוהל המוסדי." },
+            { id: "nurse-3", title: "3. ענידת יידון", desc: "ענידת יידון/צמיד תואם למטופל ע״פ הנוהל." },
+            { id: "nurse-4", title: "4. תיעוד סיעודי", desc: "תיעוד כל העשייה הסיעודית ברשומות לפי מקומם המתאים." },
+            { id: "nurse-5", title: "5. קוד לבוש", desc: "לבישת מדים מתאימים עם תג זיהוי במקום בולט." },
+            { id: "nurse-6", title: "6. שמות זהים במחלקה", desc: "הנחיות במקרה של מטופלים בעלי שם זהה במחלקה." },
+            { id: "nurse-7", title: "7. שימוש ברשומה רפואית", desc: "הכרות והכוונת שימוש עם הרשומה הרפואית - מנהל החולים, קרדקס התרופות." },
+            { id: "nurse-8", title: "8. לקיחת בדיקות ומעבדה", desc: "הכרות עם טפסי לקיחת בדיקות ואופן שליחתם במערכת ״הטיל״, שימוש במכשיר הגזים." },
+            { id: "nurse-9", title: "9. הכרת מבנה פיזי", desc: "הכרות מבנה המחלקה והחדרים השונים: מחסן קדמי, מחסן אחורי, חדר ציוד רפואי, חדר גזים רפואיים, אספקת כביסה. עגלת החייאה, ציוד להעברת מטופל." },
+            { id: "nurse-10", title: "10. חדר תרופות", desc: "הכרות עם חדר התרופות: מיקום נוזלים, תרופות, ציוד, הכנת AL TPN, רישום ואופן הוצאת טוקסיקה, רישום בקרה על חדר התקופות." },
+            { id: "nurse-11", title: "11. מבדק ידע בתרופות", desc: "מבדק ידע מחלקתי בתרופות (*בסיום ההכשרה)." },
+            { id: "nurse-12", title: "12. לומדות ומחשב", desc: "הכרות עם מערכת me teach לביצוע לומדות: מתן דם, זיהומים, חשבון רוקחי, צנתרים וכו'. הכרות עם אתר הבית, וקריאת נהלים מחלקתיים ומוסדיים. הכרות עם קלסר/ תיקיית מחשב פרוטוקולים מחלקתיים." },
+            { id: "nurse-13", title: "13. יחידת המטופל", desc: "הכרות עם יחידת המטופל: תפעול המיטה, אזור רטוב (הכנה וחיבור של תרופות, שימוש במאריכים וכו') אזור יבש (מנשם, גרביים פנאומטיות, מכשיר חימום, מד סוכר, מחשב וכו')." },
+            { id: "nurse-14", title: "14. מצבי חירום ואר״ן", desc: "התנהלות במצבי חירום / אר״ן: הכרות של האזורים המוגנים, מצבי שריפה ופינוי מטופלים, מצב מלחמה ופתיחת אתר השהייה לפינוי." }
         ],
-        "מיומנויות קליניות קריטיות": [
-            { id: "nurse-4", title: "מערכות הנשמה (Ventilators)", desc: "חיבור מנשם, ביצוע SST (כיול עצמי), זיהוי מודי הנשמה בסיסיים (VC, PC, PS) וטיפול באזעקות נפוצות." },
-            { id: "nurse-5", title: "קו עורקי (Arterial Line)", desc: "כיול טרנסדוסר (אפס), שטיפה, שאיבת דם לבדיקת גזים עורקיים (ABG) וחבישת הקיבוע." },
-            { id: "nurse-6", title: "תרופות מצילות חיים (Inotropes & Sedatives)", desc: "חישוב מינונים, הכנה של Noradrenaline, Dopamine, Propofol, מעקב לחץ דם רציף וקצב לב." },
-            { id: "nurse-7", title: "טיפול בצינור קנה (Intubation & Suction)", desc: "ביצוע סקשיין (סגור/פתוח), מדידת לחץ בבלונית (Cuff), מעקב קפנוגרפיה (EtCO2) והערכת מצב קיבוע." }
+        "מיומנויות מקצועיות כלליות (3-6 חודשים)": [
+            { id: "nurse-15", title: "15. תכנון עבודה", desc: "הכרת סדר היום, תכנון ע״פ סד״פ." },
+            { id: "nurse-16", title: "16. קבלת מטופל", desc: "קבלת מטופל כולל ביצוע קבלה סיעודית במחשב." },
+            { id: "nurse-17", title: "17. הכנת יחידת המטופל לקבלה", desc: "הכנת יחידת המטופל לקבלה לאחר קבלת נתונים ראשוניים אודות מצבו (קו עורקי, תרופות ואזופרסוריות)." },
+            { id: "nurse-18", title: "18. עמדת המטופל ותפעול מוניטור", desc: "הכרות עם עמדת המטופל, תפעול מוניטור וקביעת התראות, ציוד נדרש וציוד מתקלה הכרחי בעמדה." },
+            { id: "nurse-19", title: "19. נוהל טיפול בחפצי ערך", desc: "נוהל טיפול בחפצי ערך של המטופל." },
+            { id: "nurse-20", title: "20. נוהל טיפול בהיעלמות מטופל", desc: "נוהל טיפול בהעלמות מטופל." },
+            { id: "nurse-21", title: "21. ביצוע אומדנים ודיווח", desc: "ביצוע אומדנים ודיווח ברשומות." },
+            { id: "nurse-22", title: "22. שליחה לפעולה פולשנית", desc: "שליחת מטופל לפעולה פולשנית (מילוי צ׳ק ליסט)." },
+            { id: "nurse-23", title: "23. קבלה ומעקב אחר פעולה", desc: "קבלה ומעקב מטופל אחר פעולה פולשנית." },
+            { id: "nurse-24", title: "24. הכנה ושליחה לחדר ניתוח/CT", desc: "הכנה ושליחת מטופל לחדר ניתוח/ct." },
+            { id: "nurse-25", title: "25. קבלה ומעקב לאחר ניתוח", desc: "קבלה ומעקב המטופל לאחר חזרתו מחדר ניתוח." },
+            { id: "nurse-26", title: "26. אומדן וטיפול בפצע ניתוח", desc: "אומדן ומעקב, טיפול בפצע ניתוח." },
+            { id: "nurse-27", title: "27. זיהוי ערכים לא תקינים", desc: "זיהוי ערכים לא תקינים בבדיקות דם ותפעול בהתאם." },
+            { id: "nurse-28", title: "28. טיפול ב-VAC", desc: "הכרת חיבור ומעקב אחרי מטופלים עם vac." },
+            { id: "nurse-29", title: "29. מעקב אחר נקזים", desc: "הכרות ומעקב אחר מטופל עם נקזים: תוכן ומוצא הנקז. למשל: ג׳קסון, דריין טורקלי, ptcd, נפרוסטום וכו'." },
+            { id: "nurse-30", title: "30. הוצאת סיכות/תפרים", desc: "הוצאת סיכות/תפרים לפי בקשה רפואית, ארון סטרלי (עמדת רופאים)." },
+            { id: "nurse-31", title: "31. הגבלה פיזית במטופלים", desc: "טיפול ומעקב אחרי הגבלה פיזית במטופלים." },
+            { id: "nurse-32", title: "32. טיפול בנפטר", desc: "טיפול בנפטר ע״פ נוהל מוסדי (הוצאת צנתרים/מדבקות וכו')." },
+            { id: "nurse-33", title: "33. מניעת זיהומים", desc: "• הכרות עם כללי התמגנות מחלקתיים וסיקור מטופלים המתאשפזים ביחידה\n• 5 הרגעים, היגיינת ידיים, הכנת תרופות וכו׳\n• הכרות עם אמצעי הבידוד שגרתיים\n• הכרת תהליך הבידוד בחדר לחץ שלילי ביחידה והכרות הפעלה של החדר\n• טיפול במטופלים עם בידוד טיפתי / מגע / אווירני / הגנתי\n• מניעת אירוע דקירה מחפצים חדים והתערבות ע״פ הנוהל\n• דיווח על צנתרים (קתטר שתן, cvc וכו׳)" },
+            { id: "nurse-34", title: "34. מניעה וטיפול בכאב", desc: "• אומדן כאב והכרת השימוש בסרגלי כאב במחלקה bps וכו׳\n• הכרת פרוטוקולים לטיפול בכאב\n• הכרת טכניקות לטיפול בכאב IV PCA / EPIDURAL\n• מתן טיפול הולם ומעקב" },
+            { id: "nurse-35", title: "35. טיפול במטופל סוכרתי", desc: "• הכרת פרוטוקול טיפולי באינסולין (מעקב/פרוטוקול), DKA וכו׳\n• טיפול במטופל עם היפוגליקמיה\n• סוגי אינסולין בשימוש במחלקה\n• הזמנת כלכלה מתאימה למטופל סוכרתי בייעוץ דיאטנית" },
+            { id: "nurse-36", title: "36. טיפול במטופל עם פצעים", desc: "• הכרת נוהל הטיפול בפצע לחץ\n• זיהוי גורמי סיכון לפצעי לחץ (נורטון, אלבומין ..)\n• הדרכת המטופל ומשפחתו למניעת פצעי לחץ\n• הכרת סיווג פצעים וטיפול ע״פ דרגתם\n• הכרה והפעלת מזרנים למניעת פצעי לחץ\n• הכרת התכשירים הקיימים במחלקה\n• דיווח ברשומה על פצעי לחץ והתייעצות עם אחות פצעים" },
+            { id: "nurse-37", title: "37. טיפול סיעודי במטופל מורכב", desc: "• הכרת שיטות עבודה מקובלות (שיטת הפקדה)\n• טיפול פה + צחצוח סיעודי, טיפול בפצעים\n• החלפת וטיפול בשרוך וגאזות מהטובוס/שימוש ברסן/טרכיאוסטום לפי שיקול דעת\n• ביצוע שינויי תנוחה, רחצה יבשה, חבישת לחץ מניעתית בעכוז\n• מעקב אחר יציאות ושימוש בחוקן, הוצאת אבני צואה כפעולת סיעוד" },
+            { id: "nurse-38", title: "38. טיפול נשימתי במונשם", desc: "• הכרת אומדן נשימתי (נשימות, אומדן הפרשות, כיחלון)\n• הכרת האמצעים השונים למתן חמצן (high flow), שימוש בבלון חמצן\n• זיהוי הצורך בביצוע שאיבת הפרשות + העשרה בחמצן לפני (ביצוע סקשן סגור/פתוח עם כפפה סטרילית)\n• שימוש באמבו ידני, לקיחת דגימות ממערכת סקשן סגורה/lavage, ניטור ומעקב\n• טיפול במטופל עם פיום קנה ותשקול מעבר למסיכה טרכיאלית לפי צורך\n• הכרת סיבות להנשמה מלאכותית, שיטות הנשמה ואינדיקציות, סיבוכים והתערבות בהתאם\n• אינטובציה: הכנת הציוד, הדרכת המטופל וסיוע לרופא\n• נוהל גמילה מהנשמה, אקסטובציה: הכנת הציוד וסיוע לרופא" },
+            { id: "nurse-39", title: "39. טיפול בצנתר מרכזי", desc: "• הכרות עם נוהל מניעת זיהומים וצנתרים, ביצוע סימולציה לטיפול בצנתר מרכזי\n• הכנת הציוד וסיוע בהכנסת צנתר cvc למטופל עם רופא, תוך שמירה על הנהלים\n• מעקב צנתר והחלפת חבישה לפי הצורך, הכרת סיבוכי צנתרים מרכזיים CVC\n• הוצאת צנתר מרכזי ושליחת קצה לתרבית, עדכון צנתרים חדשים/מעקב צנתר קיים במחשב\n• לקיחת דמים מקו עורקי (סימולציה) הרשאה חריגה, הכנת הסט/ציוד להכנסת AL\n• הוצאת קו עורקי לאחות עם קורס על-בסיסי\n• טיפול בנקזים השונים (ג׳קסון, דריין טורקלי, ptcd, נפרוסטום וכו') ורישום כמות הפרשות, זיהוי סיבוכים, לקיחת דגימות לבדיקות\n• ביצוע מאזן נוזלים daily in/out put בסוף משמרת לילה" },
+            { id: "nurse-40", title: "40. טיפול בזונדה/סטומה", desc: "• הכרות עם נוהל הכנסת זונדה + ביצוע החדרה + קיבוע + וידוא מיקום\n• זיהוי סיבוכים למונשם, התוויות נגד (טראומת ראש) הכנסה דרך הפה\n• מתן הזנה דרך הזונדה + רישום ודיווח על השקית וברשומה\n• טיפול בגסטרוסטום + שטיפה, מתן תרופות וידוא מיקום ושטיפה לאחריה\n• טיפול במטופל עם סטומה/אילאוסטום, מעקב ואומדן המעי כולל החלפת שקית/קיבוע לפי הצורך, דיווח על הצורך בהשלמת הזמנת ציוד לסטומה" },
+            { id: "nurse-41", title: "41. הזנה תוך ורידית", desc: "• הכרת נוהל מתן ppn/tpn + אינסולין iv\n• הכנתו ע״פ עקרונות הנוהל בחדר התרופות ובסמוך למטופל (טכניקת החיבור)\n• הכרות עם סוגי התמיסות לרבות מעקב טריגליצרידים וסוכר" },
+            { id: "nurse-42", title: "42. טיפול בצנתר למערכת השתן (קטטר)", desc: "• הכנסת קטטר ע״פ עקרונות, מעקב אחרי הסיבוכים, לקיחת דגימות, הוצאת הצנתר, עדכון ודיווח במחשב\n• מעקב אחר תפוקת שתן שעתית ומענה הולם (שטיפת קטטר/נוזלים/משתנים), הכרות עם תמיסה לשטיפת קטטר - מטופל אורולוגי" },
+            { id: "nurse-43", title: "43. ניהול הטיפול", desc: "• וידוא הזמנת ייעוצים למטופל: רנטגן, דיאטנית, עו״סית, פיזיותרפיה" },
+            { id: "nurse-44", title: "44. רישום ודיווח ברשומות", desc: "• כתיבת דיווח סיעודי מלא, איסוף נתונים המקובל במחלקה, עדכון צנתרים אומדנים\n• העברת מידע/מסירת משמרת לפי מודל isbar, דיווח על קבלת תשובה חריגה readback, תכנים לדיווח ועדכון הרופא התורן\n• ביצוע שחרור סיעודי למטופל, מילוי טופס העברה לבית חולים אחר, דיווח על אירוע חריג / כמעט אירוע + לומדת ניהול סיכונים" },
+            { id: "nurse-45", title: "45. ביצוע הדרכות למטופל", desc: "• הכרות עם נושאי ההדרכה ביחידה (אוריינטציה במחלקה, כאב, נפילות, טיפול תרופתי חדש, הכרת שירותי תרגום, פיום קנה)" },
+            { id: "nurse-46", title: "46. הכרת הציוד והפעלת מכשור רפואי", desc: "• מוניטור/דפיברילטור, משאבות נפחיות qcore/mindray, מכשירי vac\n• מכשיר פריזמה - סיוע בהכנת ציוד להפעלת פריזמה וחיבורה ע״י אחות/רופא שעברו הכשרה. תפעול לפי הוראות\n• ציוד לנקז חזה + מים סטריליים, מכשיר high flow / airvo, בלון no helium\n• מכשיר ומסיכה ל-cpap / bipap, מכשיר ברונכוסקופיה, מכשיר אולטראסאונד, מכשיר אק״ג\n• מכשיר גליידוסקופ (לאינטובציה קשה), מכשיר/מודול ל-picco, מכשיר אולטרסוניק (INH) / argon\n• מכשיר אנקונדה (issofloran), מכשיר חימום, מכשיר גרביים פנאומטיות + האינדיקציות, מכשיר גלוקומטר + סטיקים לקטונים\n• אינטרקום, code blue + ביטול קריאה, לחצן קריאה לאחות + ביטול קריאה\n• עגלות (טיפולים, פרוצדורות, דמים), מכשיר חימום למגבונים, לחצן מצוקה - לביטחון" }
         ],
-        "מערכות מידע ותיעוד": [
-            { id: "nurse-8", title: "רישום בגיליון ממוחשב (קמיליון)", desc: "הזנת סימנים חיוניים, מאזן נוזלים שעתי, מעקב עירויים ורישום סמים ותרופות מיוחדות." },
-            { id: "nurse-9", title: "נוהל קבלה ושחרור מטופל", desc: "סדר פעולות בקבלת חולה מחדר ניתוח/מלר\"ד, שחרור למחלקה רגילה והעברת דיווח מסודר (SBAR)." }
+        "מיומנויות ייחודיות (אחרי 6 חודשים)": [
+            { id: "nurse-47", title: "47. נהלי הנשמה", desc: "הכרת/חזרה על נהלים הקשורים לטיפול החולה המונשם." },
+            { id: "nurse-48", title: "48. מכונת הנשמה", desc: "הכרות עם מכונת ההנשמה (הבנה של התראות במנשם ודרך לתקן אותם) וחיבוריה לקווי האספקה." },
+            { id: "nurse-49", title: "49. יעילות הנשמה", desc: "הכרת פרמטרים ושיטות ההנשמה והתאמתם למטופל, הערכת ייעול ההנשמה." },
+            { id: "nurse-50", title: "50. ציוד נלווה למונשם", desc: "הכרת הציוד הנלווה והנדרש למטופל מונשם (מערכת סקשן סגורה, vap, etco2)." },
+            { id: "nurse-51", title: "51. גזים ייעודיים", desc: "הכרות עם גזים ייעודים ביחיידה (no, הליום)." }
+        ],
+        "הכרות תרופות במחלקה (עד 3 חודשים)": [
+            { id: "nurse-52", title: "52. מתן בדחף", desc: "הכרות עם נוהל מתן תרופות ״בדחף״." },
+            { id: "nurse-53", title: "53. ידע פרמקולוגי", desc: "ידע בתרופות: התוויות, התוויות נגד, הלימה בטיפול תרופתי חדש, מינונים, צורת מתן, מיהול, פרמקוקנטיקה, תופעות לוואי שכיחות ומסוכנות." },
+            { id: "nurse-54", title: "54. נהלי מתן והסבר", desc: "מתן תרופות ע״פ נוהל הטיפול התרופתי, תרופות otc, כולל הדרכה למטופלים בהכרה ולמשפחותיהם." },
+            { id: "nurse-55", title: "55. מתן דם ומוצריו", desc: "מתן דם ומוצריו ע״פ נוהל מב״ר (הכרות עם נוהל מתן דם ע״י 2 אחיות) + לקיחת סוג להצלבה/cross." },
+            { id: "nurse-56", title: "56. תרופות בנות סיכון", desc: "הכרת רשימת תרופות בנות סיכון במחלקה." },
+            { id: "nurse-57", title: "57. סמים וטוקסיקה", desc: "סמים מסוכנים/ טוקסיקה: מתן, ספירה, ניהול מלאי. הכרות עם הנוהל." },
+            { id: "nurse-58", title: "58. מבחן תרופות", desc: "מבחן תרופות מחלקתי ומעבר לעצמאות בהכנת התרופות בסיום הקליטה ולפי הוראת אחות אחראית המחלקה." }
+        ],
+        "החייאה במחלקה (עד 6 חודשים)": [
+            { id: "nurse-59", title: "59. ציוד החייאה", desc: "ביצוע עגלת החייאה+ דפיברילטור+ אמבו, חמצן+ תרופות וציוד נלווה." },
+            { id: "nurse-60", title: "60. הכרת עגלה", desc: "הכרת הציוד בעגלת ההחייאה." },
+            { id: "nurse-61", title: "61. חיבור אמבו", desc: "מיומנות חיבור אמבו לחמצן." },
+            { id: "nurse-62", title: "62. הפעלת ציוד נייד", desc: "הכרה והפעלת מוניטור ודפיברילטור (נייד)." },
+            { id: "nurse-63", title: "63. סדר פעולות", desc: "הכרת סדר פעולות בעת ביצוע החייאה." },
+            { id: "nurse-64", title: "64. ניטור החייאה", desc: "מילוי טופס ניתור החייאה." },
+            { id: "nurse-65", title: "65. תרגול ועקרונות CAB", desc: "השתתפות בביצוע החייאה+ עקרונות CAB." },
+            { id: "nurse-66", title: "66. העברת חולה מורכב", desc: "הכרת ציוד העברה לחולה מורכב/מונשם." },
+            { id: "nurse-67", title: "67. קורס ACLS", desc: "הכשרה ACLS, ע״י המרכז להדרכה בבי״ח." }
+        ],
+        "נושאים כלליים ומחייבים": [
+            { id: "nurse-68", title: "68. נוהל קליטה ונספחים", desc: "הכרות עם נוהל קליטת אחות+ נספחים+משוב." },
+            { id: "nurse-69", title: "69. מדדי איכות", desc: "הכרת מדדי איכות מחלקתיים." }
         ]
     },
     advanced: {
@@ -93,15 +159,11 @@ const INITIAL_TRAINEES = [
         instructorId: "inst-1",
         startDate: "2026-05-01",
         checklist: {
-            "nurse-1": { checked: true, signoffDate: "2026-05-02", instructorName: "מיכל אהרון" },
-            "nurse-2": { checked: true, signoffDate: "2026-05-02", instructorName: "מיכל אהרון" },
-            "nurse-3": { checked: true, signoffDate: "2026-05-05", instructorName: "מיכל אהרון" },
-            "nurse-4": { checked: false },
-            "nurse-5": { checked: false },
-            "nurse-6": { checked: false },
-            "nurse-7": { checked: false },
-            "nurse-8": { checked: true, signoffDate: "2026-05-15", instructorName: "מיכל אהרון" },
-            "nurse-9": { checked: false }
+            "nurse-1": { checked: true, signoffDate: "2026-05-02", instructorName: "דסי לוריא" },
+            "nurse-2": { checked: true, signoffDate: "2026-05-02", instructorName: "דסי לוריא" },
+            "nurse-3": { checked: true, signoffDate: "2026-05-05", instructorName: "דסי לוריא" },
+            "nurse-4": { checked: true, signoffDate: "2026-05-08", instructorName: "דסי לוריא" },
+            "nurse-5": { checked: true, signoffDate: "2026-05-10", instructorName: "דסי לוריא" }
         },
         evaluation: {
             attendance: "טוב מאוד",
@@ -119,8 +181,8 @@ const INITIAL_TRAINEES = [
         instructorId: "inst-3",
         startDate: "2026-05-20",
         checklist: {
-            "intern-1": { checked: true, signoffDate: "2026-05-22", instructorName: "יעל שדה" },
-            "intern-2": { checked: true, signoffDate: "2026-05-25", instructorName: "יעל שדה" },
+            "intern-1": { checked: true, signoffDate: "2026-05-22", instructorName: "יונת נקי" },
+            "intern-2": { checked: true, signoffDate: "2026-05-25", instructorName: "יונת נקי" },
             "intern-3": { checked: false }
         },
         evaluation: null
@@ -133,13 +195,19 @@ const INITIAL_TRAINEES = [
         instructorId: "inst-2",
         startDate: "2026-04-15",
         checklist: {
-            "adv-1": { checked: true, signoffDate: "2026-04-20", instructorName: "רינת לוין" },
+            "adv-1": { checked: true, signoffDate: "2026-04-20", instructorName: "שרה אוזן" },
             "adv-2": { checked: false },
             "adv-3": { checked: false }
         },
         evaluation: null
     }
 ];
+
+// Force migrate local storage for trainees to update with the new 69-item structure
+if (localStorage.getItem("icu_trainees_migrated_v5") !== "true") {
+    localStorage.setItem("icu_trainees", JSON.stringify(INITIAL_TRAINEES));
+    localStorage.setItem("icu_trainees_migrated_v5", "true");
+}
 
 // ================= GLOBAL STATE =================
 let currentRole = "staff"; // 'staff' or 'coordinator'
@@ -793,6 +861,7 @@ function renderChecklistForTrainee(traineeId, panelId) {
     if (items.length === 0) {
         itemsHtml = '<p style="padding:20px; color:var(--neutral-gray);">אין משימות בקטגוריה זו.</p>';
     } else {
+        const isEditable = (currentRole === "coordinator" || trainee.track === "nurse");
         items.forEach(item => {
             const isChecked = trainee.checklist && trainee.checklist[item.id] && trainee.checklist[item.id].checked;
             const signoff = (trainee.checklist && trainee.checklist[item.id]) ? trainee.checklist[item.id] : null;
@@ -802,7 +871,7 @@ function renderChecklistForTrainee(traineeId, panelId) {
                     <div class="custom-checkbox-wrapper">
                         <input type="checkbox" class="custom-checkbox-input" 
                                ${isChecked ? "checked" : ""} 
-                               ${currentRole !== "coordinator" ? "disabled" : ""}
+                               ${!isEditable ? "disabled" : ""}
                                onclick="toggleChecklistItem('${item.id}', this.checked)">
                         <div class="custom-checkbox-box">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -861,7 +930,12 @@ function renderChecklistForTrainee(traineeId, panelId) {
             <!-- Header bar with info -->
             <div class="onboarding-info-bar">
                 <div class="onboarding-meta-right">
-                    <h3>${trainee.name}</h3>
+                    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 4px;">
+                        <h3 style="margin: 0;">${trainee.name}</h3>
+                        ${currentRole === "coordinator" ? `
+                            <button class="btn btn-secondary btn-sm" onclick="openEditTraineeModal('${trainee.id}')" style="padding: 2px 8px; font-size: 0.8rem;">עריכה</button>
+                        ` : ""}
+                    </div>
                     <div class="onboarding-sub">
                         <span><strong>מסלול:</strong> ${trackLabels[trainee.track]}</span>
                         <span class="meta-divider">|</span>
@@ -887,9 +961,14 @@ function renderChecklistForTrainee(traineeId, panelId) {
                 </div>
                 <!-- Checklist Items List -->
                 <div class="checklist-list-container">
-                    ${currentRole !== "coordinator" ? `
+                    ${(currentRole !== "coordinator" && trainee.track !== "nurse") ? `
                         <div class="insight-info-box" style="margin-bottom: 16px; font-size:0.85rem; padding: 10px 16px;">
                             <span>🔒 סימון מיומנויות ונהלים פתוח לשינוי <strong>לרכזת הדרכה בלבד</strong>. הצוות הכללי יכול לצפות ברשימה ובמצב ההתקדמות.</span>
+                        </div>
+                    ` : ""}
+                    ${(currentRole !== "coordinator" && trainee.track === "nurse") ? `
+                        <div class="insight-info-box" style="margin-bottom: 16px; font-size:0.85rem; padding: 10px 16px; border-color: #bbf7d0; background-color: #f0fdf4;">
+                            <span style="color: #166534;">✍️ כעורכת מסלול אחות חדשה, באפשרותך לסמן מיומנויות שביצעת באופן עצמאי.</span>
                         </div>
                     ` : ""}
                     <div class="checklist-list">
@@ -904,25 +983,41 @@ function renderChecklistForTrainee(traineeId, panelId) {
     `;
 }
 
+function renderActiveTraineeChecklist() {
+    if (currentTab === "onboarding") {
+        renderChecklistForTrainee(currentNurseId, "nurse-details-panel");
+    } else if (currentTab === "experiences") {
+        renderChecklistForTrainee(currentStudentId, "student-details-panel");
+    }
+}
+
 function setChecklistCategory(cat) {
     currentChecklistCategory = cat;
     renderActiveTraineeChecklist();
 }
 
 function toggleChecklistItem(itemId, isChecked) {
-    if (currentRole !== "coordinator") return;
-    
-    const trainee = database.trainees.find(t => t.id === currentTraineeId);
+    const traineeId = (currentTab === "onboarding") ? currentNurseId : currentStudentId;
+    const trainee = database.trainees.find(t => t.id === traineeId);
     if (!trainee) return;
+    
+    // Allow changes if coordinator, OR if trainee is nurse
+    if (currentRole !== "coordinator" && trainee.track !== "nurse") return;
     
     if (!trainee.checklist) trainee.checklist = {};
     
     if (isChecked) {
-        const instructor = database.instructors.find(i => i.id === trainee.instructorId);
+        let signoffName = "";
+        if (currentRole === "coordinator") {
+            const instructor = database.instructors.find(i => i.id === trainee.instructorId);
+            signoffName = instructor ? instructor.name : "רכזת הדרכה";
+        } else {
+            signoffName = "מילוי עצמי (אחות חדשה)";
+        }
         trainee.checklist[itemId] = {
             checked: true,
             signoffDate: new Date().toISOString().split('T')[0],
-            instructorName: instructor ? instructor.name : "רכזת הדרכה"
+            instructorName: signoffName
         };
     } else {
         trainee.checklist[itemId] = {
@@ -931,7 +1026,68 @@ function toggleChecklistItem(itemId, isChecked) {
     }
     
     saveToLocalStorage();
-    renderAll(); // Re-render to update stats and progress bars everywhere
+    renderAll();
+}
+
+function openEditTraineeModal(id) {
+    const trainee = database.trainees.find(t => t.id === id);
+    if (!trainee) return;
+    
+    document.getElementById("edit-trainee-id").value = trainee.id;
+    document.getElementById("edit-trainee-name").value = trainee.name;
+    document.getElementById("edit-trainee-school").value = trainee.school;
+    document.getElementById("edit-trainee-start-date").value = trainee.startDate;
+    
+    const trackLabels = {
+        nurse: "אחות חדשה (קליטה מלאה)",
+        advanced: "על בסיסי",
+        intern: "סטודנט - סטאז'",
+        student: "סטודנט - התנסות קצרה"
+    };
+    document.getElementById("edit-trainee-track-display").value = trackLabels[trainee.track] || trainee.track;
+    
+    const select = document.getElementById("edit-trainee-instructor");
+    select.innerHTML = '<option value="">ללא מדריכה קלינית מלווה</option>';
+    
+    database.instructors.forEach(inst => {
+        const option = document.createElement("option");
+        option.value = inst.id;
+        option.innerText = inst.name;
+        if (inst.id === trainee.instructorId) {
+            option.selected = true;
+        }
+        select.appendChild(option);
+    });
+    
+    openModal("modal-edit-trainee");
+}
+
+function saveEditedTrainee() {
+    const id = document.getElementById("edit-trainee-id").value;
+    const name = document.getElementById("edit-trainee-name").value;
+    const school = document.getElementById("edit-trainee-school").value;
+    const instructorId = document.getElementById("edit-trainee-instructor").value;
+    const startDate = document.getElementById("edit-trainee-start-date").value;
+    
+    if (!name || !school || !startDate) {
+        alert("נא למלא את כל השדות החיוניים.");
+        return;
+    }
+    
+    const trainee = database.trainees.find(t => t.id === id);
+    if (!trainee) {
+        alert("משתלם/ת לא נמצא/ה.");
+        return;
+    }
+    
+    trainee.name = name;
+    trainee.school = school;
+    trainee.instructorId = instructorId || null;
+    trainee.startDate = startDate;
+    
+    saveToLocalStorage();
+    closeModal("modal-edit-trainee");
+    renderAll();
 }
 
 // ================= TAB 3: INSTRUCTORS MANAGEMENT (COORDINATOR ONLY) =================
@@ -1113,7 +1269,7 @@ function closeModal(modalId) {
 }
 
 // Open Add Trainee Modal and pre-populate instructors
-function openAddTraineeModal() {
+function openAddTraineeModal(defaultTrack) {
     const select = document.getElementById("trainee-instructor");
     select.innerHTML = '<option value="">ללא מדריכה קלינית מלווה</option>';
     
@@ -1123,6 +1279,15 @@ function openAddTraineeModal() {
         option.innerText = inst.name;
         select.appendChild(option);
     });
+    
+    const trackSelect = document.getElementById("trainee-track");
+    if (defaultTrack) {
+        trackSelect.value = defaultTrack;
+        trackSelect.disabled = true;
+    } else {
+        trackSelect.value = "nurse";
+        trackSelect.disabled = false;
+    }
     
     openModal("modal-add-trainee");
 }
@@ -1167,6 +1332,7 @@ function saveTrainee() {
     
     // Reset form
     document.getElementById("form-add-trainee").reset();
+    document.getElementById("trainee-track").disabled = false;
     document.getElementById("trainee-start-date").value = new Date().toISOString().split('T')[0];
     
     closeModal("modal-add-trainee");
