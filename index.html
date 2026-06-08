@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>מערכת ניהול הדרכה וקליטה | טיפול נמרץ</title>
+    <!-- Google Fonts: Outfit for English/UI, Assistant for Hebrew -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Assistant:wght@300;400;600;700;800&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- App Container -->
+    <div class="app-container">
+        
+        <!-- Header -->
+        <header class="app-header">
+            <div class="header-right">
+                <div class="app-logo">
+                    <img src="logo.jpg" alt="לוגו רבקה אליה" class="logo-img">
+                </div>
+                <div class="header-title">
+                    <h1>פורטל הדרכה וקליטה</h1>
+                    <p>טיפול נמרץ כללי</p>
+                </div>
+            </div>
+            
+            <div class="header-left">
+                <!-- Role Switcher -->
+                <div class="role-selector-wrapper">
+                    <span class="role-label">מצב צפייה:</span>
+                    <div class="role-toggle-group">
+                        <button id="btn-role-staff" class="role-btn active" onclick="switchRole('staff')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            צוות כללי
+                        </button>
+                        <button id="btn-role-coordinator" class="role-btn" onclick="trySwitchToCoordinator()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="btn-icon"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                            רכזת הדרכה
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Sidebar & Main Content Layout -->
+        <div class="main-layout">
+            
+            <!-- Sidebar Navigation -->
+            <aside class="app-sidebar">
+                <nav class="sidebar-nav">
+                    <button id="tab-btn-dashboard" class="nav-item active" onclick="showTab('dashboard')">
+                        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="9" rx="1"/><rect x="14" y="3" width="7" height="5" rx="1"/><rect x="14" y="12" width="7" height="9" rx="1"/><rect x="3" y="16" width="7" height="5" rx="1"/></svg>
+                        <span>לוח בקרה</span>
+                    </button>
+                    <button id="tab-btn-onboarding" class="nav-item" onclick="showTab('onboarding')">
+                        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        <span>קליטת אחות חדשה</span>
+                    </button>
+                    <button id="tab-btn-instructors" class="nav-item coordinator-only-nav hidden" onclick="showTab('instructors')">
+                        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                        <span>שיבוץ ומעקב מדריכות</span>
+                        <span class="lock-badge">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                        </span>
+                    </button>
+                    <button id="tab-btn-protocols" class="nav-item" onclick="showTab('protocols')">
+                        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                        <span>נהלים וסילבוסים</span>
+                    </button>
+                </nav>
+                
+                <div class="sidebar-footer">
+                    <p class="dept-info">טיפול נמרץ כללי | סהר 2026</p>
+                </div>
+            </aside>
+
+            <!-- Main Content Window -->
+            <main class="app-content">
+                
+                <!-- Tab: Dashboard -->
+                <section id="tab-dashboard" class="tab-content active">
+                    <div class="content-header">
+                        <h2>תמונת מצב מחלקתית</h2>
+                        <p>מעקב כללי אחר קליטת צוות ושיבוצי הדרכה במחלקה</p>
+                    </div>
+                    
+                    <!-- Stats Grid -->
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper bg-blue-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="stat-icon text-blue"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">סך הכל בתהליך קליטה</span>
+                                <h3 id="stat-total-trainees">0</h3>
+                                <span class="stat-subtext" id="stat-sub-trainees">אחיות חדשות וסטודנטים</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper bg-green-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="stat-icon text-green"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">מיומנויות שבוצעו</span>
+                                <h3 id="stat-completed-skills">0%</h3>
+                                <span class="stat-subtext">ממוצע התקדמות מחלקתי</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon-wrapper bg-purple-light">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="stat-icon text-purple"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                            </div>
+                            <div class="stat-info">
+                                <span class="stat-label">מדריכות קליניות פעילות</span>
+                                <h3 id="stat-active-instructors">0</h3>
+                                <span class="stat-subtext">משובצות כעת להדרכה</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Welcome / Dashboard Main Grid -->
+                    <div class="dashboard-grid">
+                        
+                        <!-- Onboarding Overview List -->
+                        <div class="dashboard-panel panel-large">
+                            <div class="panel-header">
+                                <h3>צוות בתהליך קליטה פעיל</h3>
+                                <button class="btn btn-primary coordinator-only hidden" onclick="openAddTraineeModal()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    קליטת משתלם/ת חדש/ה
+                                </button>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>שם</th>
+                                                <th>מסלול</th>
+                                                <th>מוסד לימודים</th>
+                                                <th>מדריכה מלווה</th>
+                                                <th>התקדמות</th>
+                                                <th>פעולות</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dashboard-trainees-table-body">
+                                            <!-- Dynamically populated -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="dashboard-no-trainees" class="empty-state hidden">
+                                    <p>אין כרגע משתלמים בתהליך קליטה פעיל.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sidebar Info panel -->
+                        <div class="dashboard-panel panel-small">
+                            <div class="panel-header">
+                                <h3>ערוצי הדרכה במחלקה</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="tracks-summary">
+                                    <div class="track-summary-item">
+                                        <div class="track-color-badge badge-blue"></div>
+                                        <div class="track-summary-info">
+                                            <h4>אחיות חדשות</h4>
+                                            <p id="summary-track-new-nurse">0 אחיות בתהליך קליטה</p>
+                                        </div>
+                                    </div>
+                                    <div class="track-summary-item">
+                                        <div class="track-color-badge badge-orange"></div>
+                                        <div class="track-summary-info">
+                                            <h4>על בסיסי</h4>
+                                            <p id="summary-track-advanced">0 אחיות בהשתלמות</p>
+                                        </div>
+                                    </div>
+                                    <div class="track-summary-item">
+                                        <div class="track-color-badge badge-green"></div>
+                                        <div class="track-summary-info">
+                                            <h4>סטודנטים - סטאז'</h4>
+                                            <p id="summary-track-intern">0 סטודנטים</p>
+                                        </div>
+                                    </div>
+                                    <div class="track-summary-item">
+                                        <div class="track-color-badge badge-purple"></div>
+                                        <div class="track-summary-info">
+                                            <h4>סטודנטים - התנסות</h4>
+                                            <p id="summary-track-student">0 סטודנטים</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- Tab: Onboarding Tracker -->
+                <section id="tab-onboarding" class="tab-content">
+                    <div class="content-header">
+                        <h2>מעקב קליטת אחות חדשה / מתלמדים</h2>
+                        <p>צ'קליסט מיומנויות דינמי ומעקב שלבים מותאם אישית</p>
+                    </div>
+
+                    <div class="onboarding-container">
+                        <!-- Trainee Sidebar Selector -->
+                        <div class="trainee-selector-panel">
+                            <h3>בחרי משתלם/ת למעקב</h3>
+                            <div class="search-box">
+                                <input type="text" id="trainee-search" placeholder="חיפוש לפי שם..." oninput="filterTraineeList()">
+                            </div>
+                            <div class="trainee-list-group" id="trainee-selection-list">
+                                <!-- Dynamically populated -->
+                            </div>
+                        </div>
+
+                        <!-- Onboarding Checklist Panel -->
+                        <div class="onboarding-details-panel" id="onboarding-details-panel">
+                            <!-- Populated when a trainee is selected -->
+                            <div class="no-selection-state">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="empty-icon"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                <h3>לא נבחר/ה משתלם/ת</h3>
+                                <p>אנא בחרי משתלם/ת מהרשימה בצד ימין כדי לצפות בצ'קליסט המיומנויות ובהתקדמות.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab: Instructors (Coordinator Only) -->
+                <section id="tab-instructors" class="tab-content">
+                    <div class="content-header">
+                        <h2>מעקב וחלוקת מדריכות קליניות</h2>
+                        <p>ניהול עומסי שיבוץ והיסטוריית הדרכה (תצוגת רכזת הדרכה בלבד)</p>
+                    </div>
+
+                    <div class="instructors-dashboard-layout">
+                        <!-- Instructors Table Panel -->
+                        <div class="dashboard-panel panel-large">
+                            <div class="panel-header">
+                                <h3>רשימת המדריכות הקליניות במחלקה</h3>
+                                <button class="btn btn-primary" onclick="openAddInstructorModal()">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    הוספת מדריכה קלינית
+                                </button>
+                            </div>
+                            <div class="panel-body">
+                                <div class="table-responsive">
+                                    <table class="data-table">
+                                        <thead>
+                                            <tr>
+                                                <th>שם המדריכה</th>
+                                                <th>התמחות / הערות</th>
+                                                <th>מודרך/ת נוכחי/ת</th>
+                                                <th class="stats-col">הדרכות שבוצעו (מונה שנתי)</th>
+                                                <th>פעולות</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="instructors-table-body">
+                                            <!-- Dynamically populated -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Statistics card / Helper -->
+                        <div class="dashboard-panel panel-small">
+                            <div class="panel-header">
+                                <h3>מדדי חלוקת הדרכה</h3>
+                            </div>
+                            <div class="panel-body">
+                                <div class="instructor-insights">
+                                    <div class="insight-stat">
+                                        <h4 id="stat-total-instructors-count">0</h4>
+                                        <p>סך הכל מדריכות במאגר</p>
+                                    </div>
+                                    <hr>
+                                    <div class="insight-stat">
+                                        <h4 id="stat-busy-instructors">0</h4>
+                                        <p>מדריכות מלוות כעת (עסוקות)</p>
+                                    </div>
+                                    <hr>
+                                    <div class="insight-info-box">
+                                        <h5>💡 טיפ לרכזת:</h5>
+                                        <p>על מנת לשמור על חלוקת עומס הוגנת, מומלץ לשבץ מדריכות שיש להן מונה שנתי נמוך או שאינן משובצות כעת ללוות משתלם פעיל.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab: Protocols -->
+                <section id="tab-protocols" class="tab-content">
+                    <div class="content-header">
+                        <h2>נהלים, סילבוסים ותכני הדרכה</h2>
+                        <p>גישה מהירה לכלל חומרי הלימוד והפרוטוקולים המחלקתיים</p>
+                    </div>
+
+                    <!-- Filter Bar -->
+                    <div class="filter-bar">
+                        <div class="search-box">
+                            <input type="text" id="protocol-search" placeholder="חיפוש נוהל או סילבוס..." oninput="filterProtocols()">
+                        </div>
+                        <div class="category-filters" id="protocol-category-filters">
+                            <button class="filter-tag active" data-category="all" onclick="filterProtocolCategory('all')">הכל</button>
+                            <button class="filter-tag" data-category="nurse" onclick="filterProtocolCategory('nurse')">אחיות חדשות</button>
+                            <button class="filter-tag" data-category="advanced" onclick="filterProtocolCategory('advanced')">על בסיסי</button>
+                            <button class="filter-tag" data-category="intern" onclick="filterProtocolCategory('intern')">סטאז'</button>
+                            <button class="filter-tag" data-category="student" onclick="filterProtocolCategory('student')">סטודנטים (התנסות)</button>
+                            <button class="filter-tag" data-category="general" onclick="filterProtocolCategory('general')">נהלים כלליים</button>
+                        </div>
+                        <button class="btn btn-secondary coordinator-only hidden" onclick="openAddProtocolModal()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="btn-icon"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                            הוספת נוהל/סילבוס
+                        </button>
+                    </div>
+
+                    <!-- Protocols Grid -->
+                    <div class="protocols-grid" id="protocols-grid-container">
+                        <!-- Dynamically populated -->
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- ================= MODALS & POPUPS ================= -->
+
+    <!-- Passcode Modal (Role switch validation) -->
+    <div id="modal-passcode" class="modal-overlay">
+        <div class="modal-container modal-small">
+            <div class="modal-header">
+                <h3>אזור מוגן - רכזת הדרכה</h3>
+                <button class="modal-close-btn" onclick="closeModal('modal-passcode')">&times;</button>
+            </div>
+            <div class="modal-body text-center">
+                <p>אנא הזן קוד גישה לצפייה בנתוני המדריכות וניהול השיבוצים:</p>
+                <div class="passcode-input-wrapper">
+                    <input type="password" id="passcode-input" maxlength="4" placeholder="••••" autofocus onkeydown="if(event.key==='Enter') verifyPasscode()">
+                </div>
+                <div id="passcode-error" class="error-message hidden">קוד גישה שגוי. נסה שנית (רמז: 1234)</div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-passcode')">ביטול</button>
+                <button class="btn btn-primary" onclick="verifyPasscode()">כניסה</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add New Trainee -->
+    <div id="modal-add-trainee" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>קליטת משתלם/ת חדש/ה</h3>
+                <button class="modal-close-btn" onclick="closeModal('modal-add-trainee')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-add-trainee" onsubmit="event.preventDefault(); saveTrainee();">
+                    <div class="form-group">
+                        <label for="trainee-name">שם מלא:</label>
+                        <input type="text" id="trainee-name" required placeholder="למשל: שירה כהן">
+                    </div>
+                    <div class="form-group">
+                        <label for="trainee-track">מסלול הדרכה:</label>
+                        <select id="trainee-track" required onchange="onTrackChangedInForm()">
+                            <option value="nurse">אחות חדשה (קליטה מלאה)</option>
+                            <option value="advanced">על בסיסי</option>
+                            <option value="intern">סטודנט - סטאז'</option>
+                            <option value="student">סטודנט - התנסות קצרה</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="trainee-school">בית ספר / מוסד לימודים:</label>
+                        <input type="text" id="trainee-school" required placeholder="למשל: תל השומר, אוניברסיטת תל אביב">
+                    </div>
+                    <div class="form-group">
+                        <label for="trainee-instructor">מדריכה קלינית מלווה:</label>
+                        <select id="trainee-instructor">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="trainee-start-date">תאריך תחילת הדרכה:</label>
+                        <input type="date" id="trainee-start-date" required>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-add-trainee')">ביטול</button>
+                <button class="btn btn-primary" onclick="saveTrainee()">שמירה</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add New Instructor -->
+    <div id="modal-add-instructor" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>הוספת מדריכה קלינית</h3>
+                <button class="modal-close-btn" onclick="closeModal('modal-add-instructor')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-add-instructor" onsubmit="event.preventDefault(); saveInstructor();">
+                    <div class="form-group">
+                        <label for="instructor-name">שם המדריכה:</label>
+                        <input type="text" id="instructor-name" required placeholder="למשל: יעל לוי">
+                    </div>
+                    <div class="form-group">
+                        <label for="instructor-specialty">תחום התמחות או הערות:</label>
+                        <input type="text" id="instructor-specialty" placeholder="למשל: הנשמה מתקדמת, אקמו, הדריכה סטאז'רים בעבר">
+                    </div>
+                    <div class="form-group">
+                        <label for="instructor-history">כמות הדרכות היסטורית (מונה התחלתי):</label>
+                        <input type="number" id="instructor-history" value="0" min="0">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-add-instructor')">ביטול</button>
+                <button class="btn btn-primary" onclick="saveInstructor()">שמירה</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Add New Protocol -->
+    <div id="modal-add-protocol" class="modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3>הוספת נוהל / סילבוס חדש</h3>
+                <button class="modal-close-btn" onclick="closeModal('modal-add-protocol')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="form-add-protocol" onsubmit="event.preventDefault(); saveProtocol();">
+                    <div class="form-group">
+                        <label for="protocol-title">כותרת הנוהל / סילבוס:</label>
+                        <input type="text" id="protocol-title" required placeholder="למשל: פרוטוקול שאיבת דם מקו עורקי">
+                    </div>
+                    <div class="form-group">
+                        <label for="protocol-category">קטגוריה:</label>
+                        <select id="protocol-category" required>
+                            <option value="nurse">אחיות חדשות</option>
+                            <option value="advanced">על בסיסי</option>
+                            <option value="intern">סטאז'</option>
+                            <option value="student">סטודנטים (התנסות)</option>
+                            <option value="general">נהלים כלליים</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="protocol-desc">תיאור קצר:</label>
+                        <textarea id="protocol-desc" required rows="3" placeholder="הסבר קצר על נוהל העבודה או תוכנית ההתנסות..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="protocol-url">קישור למסמך (מחשב מחלקה / כונן משותף):</label>
+                        <input type="text" id="protocol-url" placeholder="למשל: file:///K:/ICU-Protocols/arterial_line.pdf">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-add-protocol')">ביטול</button>
+                <button class="btn btn-primary" onclick="saveProtocol()">שמירה</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal: Evaluation (Summary & Rating) -->
+    <div id="modal-evaluation" class="modal-overlay">
+        <div class="modal-container modal-large">
+            <div class="modal-header">
+                <h3>הערכת מתלמדת דיגיטלית</h3>
+                <button class="modal-close-btn" onclick="closeModal('modal-evaluation')">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="eval-trainee-meta">
+                    <h4 id="eval-trainee-name">שם המתלמדת</h4>
+                    <p id="eval-trainee-track-info">מסלול והתמחות</p>
+                </div>
+                <form id="form-evaluation" onsubmit="event.preventDefault(); saveEvaluation();">
+                    <input type="hidden" id="eval-trainee-id">
+                    
+                    <div class="eval-grid">
+                        <div class="form-group">
+                            <label for="eval-attendance">עמידה בזמנים ונוכחות:</label>
+                            <select id="eval-attendance" required>
+                                <option value="">בחרי ציון...</option>
+                                <option value="עולה על הציפיות">עולה על הציפיות</option>
+                                <option value="טוב מאוד">טוב מאוד (מתאים למצופה)</option>
+                                <option value="טעון שיפור">טעון שיפור</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="eval-professional">רמה מקצועית וידע קליני:</label>
+                            <select id="eval-professional" required>
+                                <option value="">בחרי ציון...</option>
+                                <option value="עולה על הציפיות">עולה על הציפיות</option>
+                                <option value="טוב מאוד">טוב מאוד (מתאים למצופה)</option>
+                                <option value="טעון שיפור">טעון שיפור</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eval-communication">יחסי אנוש ועבודה בצוות:</label>
+                        <select id="eval-communication" required>
+                            <option value="">בחרי ציון...</option>
+                            <option value="עולה על הציפיות">עולה על הציפיות</option>
+                            <option value="טוב מאוד">טוב מאוד (מתאים למצופה)</option>
+                            <option value="טעון שיפור">טעון שיפור</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="eval-summary">סיכום הערכה קלינית (מדריכה):</label>
+                        <textarea id="eval-summary" rows="4" placeholder="רשמי כאן הערות לסיכום ההתקדמות, חוזקות ונושאים לשיפור..."></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal('modal-evaluation')">ביטול</button>
+                <button class="btn btn-primary" onclick="saveEvaluation()">שמירת הערכה</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
