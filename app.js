@@ -183,9 +183,9 @@ function loadFromLocalStorage() {
             database.trainees = JSON.parse(storedTrainees);
             database.protocols = JSON.parse(storedProtocols);
             
-            // Check if loaded instructors are mock ones and update to real list
-            const hasMockInstructors = database.instructors.some(inst => inst.name === "מיכל אהרון");
-            if (hasMockInstructors) {
+            // If the loaded list doesn't contain the real instructor "דסי לוריא", populate with the real list
+            const hasRealInstructors = database.instructors.some(inst => inst.name === "דסי לוריא");
+            if (!hasRealInstructors) {
                 database.instructors = [...INITIAL_INSTRUCTORS];
                 saveToLocalStorage();
             } else {
