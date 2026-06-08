@@ -144,7 +144,9 @@ const INITIAL_TRAINEES = [
 // ================= GLOBAL STATE =================
 let currentRole = "staff"; // 'staff' or 'coordinator'
 let currentTab = "dashboard";
-let currentTraineeId = null;
+let currentNurseId = null;
+let currentStudentId = null;
+let selectedExperienceFilter = "all";
 let currentChecklistCategory = "";
 
 // Database stored in Memory, initialized from LocalStorage
@@ -258,7 +260,8 @@ function saveToLocalStorage() {
 // ================= RENDER CONTROL HUB =================
 function renderAll() {
     renderDashboard();
-    renderTraineeSelector();
+    renderNurseSelector();
+    renderExperienceSelector();
     renderActiveTraineeChecklist();
     renderInstructors();
     renderFortnightlyPlacements();
@@ -371,9 +374,13 @@ function showTab(tabName) {
     });
     
     // Specific actions on tab change
-    if (tabName === "onboarding" && currentTraineeId === null && database.trainees.length > 0) {
-        // Auto-select first trainee
-        selectTrainee(database.trainees[0].id);
+    if (tabName === "onboarding" && currentNurseId === null && database.trainees.length > 0) {
+        const firstNurse = database.trainees.find(t => t.track === "nurse");
+        if (firstNurse) selectTrainee(firstNurse.id);
+    }
+    if (tabName === "experiences" && currentStudentId === null && database.trainees.length > 0) {
+        const firstStudent = database.trainees.find(t => t.track !== "nurse");
+        if (firstStudent) selectTrainee(firstStudent.id);
     }
     
     renderAll();
@@ -484,8 +491,17 @@ function renderDashboard() {
 }
 
 function viewTraineeOnboarding(id) {
+    const trainee = database.trainees.find(t => t.id === id);
+    if (!trainee) return;
+    
     selectTrainee(id);
-    showTab("onboarding");
+    if (trainee.track === "nurse") {
+        showTab("onboarding");
+    } else {
+        selectedExperienceFilter = "all";
+        updateExperienceFiltersUI();
+        showTab("experiences");
+    }
 }
 
 function calculateTraineeProgress(trainee) {
@@ -536,8 +552,11 @@ function tryCompleteOrDeleteTrainee(id) {
         // Remove trainee from list
         database.trainees = database.trainees.filter(t => t.id !== id);
         
-        if (currentTraineeId === id) {
-            currentTraineeId = null;
+        if (currentNurseId === id) {
+            currentNurseId = null;
+        }
+        if (currentStudentId === id) {
+            currentStudentId = null;
         }
         
         saveToLocalStorage();
@@ -546,30 +565,27 @@ function tryCompleteOrDeleteTrainee(id) {
 }
 
 // ================= TAB 2: ONBOARDING TRACKER LOGIC =================
-function renderTraineeSelector() {
-    const listContainer = document.getElementById("trainee-selection-list");
+function renderNurseSelector() {
+    const listContainer = document.getElementById("nurse-selection-list");
     if (!listContainer) return;
     listContainer.innerHTML = "";
     
-    const searchVal = document.getElementById("trainee-search").value.toLowerCase();
+    const searchInput = document.getElementById("nurse-search");
+    const searchVal = searchInput ? searchInput.value.toLowerCase() : "";
     
-    const filtered = database.trainees.filter(t => t.name.toLowerCase().includes(searchVal));
+    const filtered = database.trainees.filter(t => 
+        t.track === "nurse" && 
+        t.name.toLowerCase().includes(searchVal)
+    );
     
     if (filtered.length === 0) {
-        listContainer.innerHTML = '<p style="padding: 10px; color: var(--neutral-gray); font-size: 0.9rem;">לא נמצאו משתלמים...</p>';
+        listContainer.innerHTML = '<p style="padding: 10px; color: var(--neutral-gray); font-size: 0.9rem;">לא נמצאו אחיות...</p>';
         return;
     }
     
-    const trackLabels = {
-        nurse: "אחות חדשה",
-        advanced: "על בסיסי",
-        intern: "סטאז'",
-        student: "התנסות קצרה"
-    };
-    
     filtered.forEach(t => {
         const item = document.createElement("button");
-        item.className = `trainee-list-item ${t.id === currentTraineeId ? "selected" : ""}`;
+        item.className = `trainee-list-item ${t.id === currentNurseId ? "selected" : ""}`;
         item.onclick = () => selectTrainee(t.id);
         
         const progress = calculateTraineeProgress(t);
@@ -577,7 +593,7 @@ function renderTraineeSelector() {
         item.innerHTML = `
             <span class="trainee-item-name">${t.name}</span>
             <div class="trainee-item-meta">
-                <span>${trackLabels[t.track]}</span>
+                <span>אחות חדשה</span>
                 <strong>${progress}%</strong>
             </div>
         `;
@@ -585,48 +601,163 @@ function renderTraineeSelector() {
     });
 }
 
-function filterTraineeList() {
-    renderTraineeSelector();
+function renderExperienceSelector() {
+    const listContainer = document.getElementById("student-selection-list");
+    if (!listContainer) return;
+    listContainer.innerHTML = "";
+    
+    const searchInput = document.getElementById("student-search");
+    const searchVal = searchInput ? searchInput.value.toLowerCase() : "";
+    
+    const filtered = database.trainees.filter(t => {
+        if (t.track === "nurse") return false;
+        
+        const matchesSearch = t.name.toLowerCase().includes(searchVal);
+        const matchesFilter = (selectedExperienceFilter === "all") || (t.track === selectedExperienceFilter);
+        
+        return matchesSearch && matchesFilter;
+    });
+    
+    if (filtered.length === 0) {
+        listContainer.innerHTML = '<p style="padding: 10px; color: var(--neutral-gray); font-size: 0.9rem;">לא נמצאו משתלמים...</p>';
+        return;
+    }
+    
+    const trackLabels = {
+        advanced: "על בסיסי",
+        intern: "סטאז'",
+        student: "התנסות קצרה"
+    };
+    
+    const trackClass = {
+        advanced: "badge-orange",
+        intern: "badge-green",
+        student: "badge-purple"
+    };
+    
+    filtered.forEach(t => {
+        const item = document.createElement("button");
+        item.className = `trainee-list-item ${t.id === currentStudentId ? "selected" : ""}`;
+        item.onclick = () => selectTrainee(t.id);
+        
+        const progress = calculateTraineeProgress(t);
+        
+        item.innerHTML = `
+            <span class="trainee-item-name">${t.name}</span>
+            <div class="trainee-item-meta" style="margin-top: 4px; display: flex; flex-direction: column; gap: 2px; align-items: flex-start; width: 100%;">
+                <div style="display: flex; justify-content: space-between; width: 100%; align-items: center;">
+                    <span class="badge ${trackClass[t.track]}" style="font-size: 0.75rem; padding: 2px 6px;">${trackLabels[t.track]}</span>
+                    <strong>${progress}%</strong>
+                </div>
+                <span style="font-size: 0.8rem; color: var(--neutral-gray); margin-top: 4px; font-weight: 600;">🏫 מוסד: ${t.school}</span>
+            </div>
+        `;
+        listContainer.appendChild(item);
+    });
+}
+
+function renderNurseTab() {
+    renderNurseSelector();
+    renderActiveTraineeChecklist();
+}
+
+function renderExperiencesTab() {
+    renderExperienceSelector();
+    renderActiveTraineeChecklist();
 }
 
 function selectTrainee(id) {
-    currentTraineeId = id;
-    
-    // Initialize default checklist tab/category for this trainee's track
     const trainee = database.trainees.find(t => t.id === id);
-    if (trainee) {
+    if (!trainee) return;
+    
+    if (trainee.track === "nurse") {
+        currentNurseId = id;
+        const categories = Object.keys(CHECKLIST_TEMPLATES[trainee.track] || {});
+        if (categories.length > 0) {
+            currentChecklistCategory = categories[0];
+        }
+    } else {
+        currentStudentId = id;
         const categories = Object.keys(CHECKLIST_TEMPLATES[trainee.track] || {});
         if (categories.length > 0) {
             currentChecklistCategory = categories[0];
         }
     }
     
-    renderTraineeSelector();
+    renderNurseSelector();
+    renderExperienceSelector();
     renderActiveTraineeChecklist();
 }
 
 function setDefaultChecklistCategory() {
-    if (database.trainees.length > 0 && currentTraineeId === null) {
-        selectTrainee(database.trainees[0].id);
+    const firstNurse = database.trainees.find(t => t.track === "nurse");
+    if (firstNurse) {
+        currentNurseId = firstNurse.id;
+    }
+    const firstStudent = database.trainees.find(t => t.track !== "nurse");
+    if (firstStudent) {
+        currentStudentId = firstStudent.id;
+    }
+    
+    const activeTrainee = firstNurse || firstStudent;
+    if (activeTrainee) {
+        const categories = Object.keys(CHECKLIST_TEMPLATES[activeTrainee.track] || {});
+        if (categories.length > 0) {
+            currentChecklistCategory = categories[0];
+        }
     }
 }
 
-function renderActiveTraineeChecklist() {
-    const panel = document.getElementById("onboarding-details-panel");
+function setExperienceFilter(filterType) {
+    selectedExperienceFilter = filterType;
+    updateExperienceFiltersUI();
+    
+    const filteredTrainees = database.trainees.filter(t => {
+        if (t.track === "nurse") return false;
+        return (filterType === "all") || (t.track === filterType);
+    });
+    
+    const isCurrentStudentInFiltered = filteredTrainees.some(t => t.id === currentStudentId);
+    if (!isCurrentStudentInFiltered) {
+        if (filteredTrainees.length > 0) {
+            selectTrainee(filteredTrainees[0].id);
+        } else {
+            currentStudentId = null;
+        }
+    }
+    
+    renderExperienceSelector();
+    renderActiveTraineeChecklist();
+}
+
+function updateExperienceFiltersUI() {
+    const tags = document.querySelectorAll("#experience-track-filters .filter-tag");
+    tags.forEach(tag => {
+        if (tag.getAttribute("data-exp-track") === selectedExperienceFilter) {
+            tag.classList.add("active");
+        } else {
+            tag.classList.remove("active");
+        }
+    });
+}
+
+function renderChecklistForTrainee(traineeId, panelId) {
+    const panel = document.getElementById(panelId);
     if (!panel) return;
     
-    if (!currentTraineeId) {
+    if (!traineeId) {
+        const isNurse = (panelId === "nurse-details-panel");
         panel.innerHTML = `
             <div class="no-selection-state">
                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="empty-icon"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
-                <h3>לא נבחר/ה משתלם/ת</h3>
-                <p>אנא בחרי משתלם/ת מהרשימה בצד ימין כדי לצפות בצ'קליסט המיומנויות ובהתקדמות.</p>
+                <h3>לא נבחר/ה ${isNurse ? "אחות" : "משתלם/ת"}</h3>
+                <p>אנא בחרי ${isNurse ? "אחות" : "משתלם/ת"} מהרשימה בצד ימין כדי לצפות בצ'קליסט המיומנויות ובהתקדמות.</p>
             </div>
         `;
         return;
     }
     
-    const trainee = database.trainees.find(t => t.id === currentTraineeId);
+    const trainee = database.trainees.find(t => t.id === traineeId);
     if (!trainee) return;
     
     const instructor = database.instructors.find(i => i.id === trainee.instructorId);
@@ -643,23 +774,21 @@ function renderActiveTraineeChecklist() {
     const template = CHECKLIST_TEMPLATES[trainee.track];
     const categories = Object.keys(template || {});
     
-    // If our current category doesn't belong to this track, reset to first category
-    if (!categories.includes(currentChecklistCategory) && categories.length > 0) {
-        currentChecklistCategory = categories[0];
+    let activeCategory = currentChecklistCategory;
+    if (!categories.includes(activeCategory) && categories.length > 0) {
+        activeCategory = categories[0];
     }
     
-    // Checklist Tab Navigation
     let categoryTabsHtml = "";
     categories.forEach(cat => {
         categoryTabsHtml += `
-            <button class="checklist-tab-btn ${cat === currentChecklistCategory ? "active" : ""}" 
+            <button class="checklist-tab-btn ${cat === activeCategory ? "active" : ""}" 
                     onclick="setChecklistCategory('${cat}')">${cat}</button>
         `;
     });
     
-    // Checklist Items for current category
     let itemsHtml = "";
-    const items = template[currentChecklistCategory] || [];
+    const items = template[activeCategory] || [];
     
     if (items.length === 0) {
         itemsHtml = '<p style="padding:20px; color:var(--neutral-gray);">אין משימות בקטגוריה זו.</p>';
@@ -694,7 +823,6 @@ function renderActiveTraineeChecklist() {
         });
     }
     
-    // Evaluation summary section
     let evalHtml = "";
     if (trainee.evaluation) {
         evalHtml = `
@@ -1043,8 +1171,16 @@ function saveTrainee() {
     
     closeModal("modal-add-trainee");
     
-    // Select the new trainee in the onboarding list
-    currentTraineeId = newTrainee.id;
+    // Select the new trainee in the corresponding list and show appropriate tab
+    if (track === "nurse") {
+        currentNurseId = newTrainee.id;
+        showTab("onboarding");
+    } else {
+        currentStudentId = newTrainee.id;
+        selectedExperienceFilter = "all";
+        updateExperienceFiltersUI();
+        showTab("experiences");
+    }
     
     renderAll();
 }

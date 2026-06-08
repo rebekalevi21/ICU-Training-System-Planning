@@ -58,6 +58,10 @@
                         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
                         <span>קליטת אחות חדשה</span>
                     </button>
+                    <button id="tab-btn-experiences" class="nav-item" onclick="showTab('experiences')">
+                        <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        <span>התנסויות בטיפול נמרץ</span>
+                    </button>
                     <button id="tab-btn-instructors" class="nav-item coordinator-only-nav hidden" onclick="showTab('instructors')">
                         <svg class="nav-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
                         <span>שיבוץ ומעקב מדריכות</span>
@@ -198,28 +202,69 @@
                     </div>
                 </section>
 
-                <!-- Tab: Onboarding Tracker -->
+                <!-- Tab: Onboarding Tracker (Nurses Only) -->
                 <section id="tab-onboarding" class="tab-content">
                     <div class="content-header">
-                        <h2>מעקב קליטת אחות חדשה / מתלמדים</h2>
-                        <p>צ'קליסט מיומנויות דינמי ומעקב שלבים מותאם אישית</p>
+                        <h2>מעקב קליטת אחות חדשה</h2>
+                        <p>צ'קליסט מיומנויות קליניות וליווי מקצועי במחלקה</p>
                     </div>
 
                     <div class="onboarding-container">
-                        <!-- Trainee Sidebar Selector -->
+                        <!-- Nurse Sidebar Selector -->
                         <div class="trainee-selector-panel">
-                            <h3>בחרי משתלם/ת למעקב</h3>
+                            <h3>בחרי אחות לקליטה</h3>
                             <div class="search-box">
-                                <input type="text" id="trainee-search" placeholder="חיפוש לפי שם..." oninput="filterTraineeList()">
+                                <input type="text" id="nurse-search" placeholder="חיפוש לפי שם..." oninput="renderNurseTab()">
                             </div>
-                            <div class="trainee-list-group" id="trainee-selection-list">
+                            <div class="trainee-list-group" id="nurse-selection-list">
                                 <!-- Dynamically populated -->
                             </div>
                         </div>
 
-                        <!-- Onboarding Checklist Panel -->
-                        <div class="onboarding-details-panel" id="onboarding-details-panel">
-                            <!-- Populated when a trainee is selected -->
+                        <!-- Nurse Onboarding Checklist Panel -->
+                        <div class="onboarding-details-panel" id="nurse-details-panel">
+                            <!-- Populated when a nurse is selected -->
+                            <div class="no-selection-state">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="empty-icon"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
+                                <h3>לא נבחרה אחות</h3>
+                                <p>אנא בחרי אחות מהרשימה בצד ימין כדי לצפות בצ'קליסט המיומנויות ובהתקדמות.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Tab: ICU Clinical Experiences (Students, Interns, Advanced) -->
+                <section id="tab-experiences" class="tab-content">
+                    <div class="content-header">
+                        <h2>התנסויות קליניות בטיפול נמרץ</h2>
+                        <p>מעקב וסילבוס לסטודנטים, סטאז'רים ומשתלמי קורס על-בסיסי</p>
+                    </div>
+
+                    <div class="onboarding-container">
+                        <!-- Student Sidebar Selector -->
+                        <div class="trainee-selector-panel">
+                            <h3>בחרי משתלם/ת למעקב</h3>
+                            
+                            <!-- Track Filter Group -->
+                            <div class="category-filters" id="experience-track-filters" style="margin-bottom: 12px; gap: 4px; flex-wrap: wrap;">
+                                <button class="filter-tag active" data-exp-track="all" onclick="setExperienceFilter('all')" style="padding: 4px 8px; font-size: 0.8rem; border-radius: var(--radius-sm);">הכל</button>
+                                <button class="filter-tag" data-exp-track="student" onclick="setExperienceFilter('student')" style="padding: 4px 8px; font-size: 0.8rem; border-radius: var(--radius-sm);">התנסות קצרה</button>
+                                <button class="filter-tag" data-exp-track="intern" onclick="setExperienceFilter('intern')" style="padding: 4px 8px; font-size: 0.8rem; border-radius: var(--radius-sm);">סטאז'</button>
+                                <button class="filter-tag" data-exp-track="advanced" onclick="setExperienceFilter('advanced')" style="padding: 4px 8px; font-size: 0.8rem; border-radius: var(--radius-sm);">על בסיסי</button>
+                            </div>
+
+                            <div class="search-box">
+                                <input type="text" id="student-search" placeholder="חיפוש לפי שם..." oninput="renderExperiencesTab()">
+                            </div>
+                            
+                            <div class="trainee-list-group" id="student-selection-list">
+                                <!-- Dynamically populated -->
+                            </div>
+                        </div>
+
+                        <!-- Student Onboarding Checklist Panel -->
+                        <div class="onboarding-details-panel" id="student-details-panel">
+                            <!-- Populated when a student is selected -->
                             <div class="no-selection-state">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="empty-icon"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/></svg>
                                 <h3>לא נבחר/ה משתלם/ת</h3>
