@@ -248,6 +248,10 @@
                         <!-- Student Sidebar Selector -->
                         <div class="trainee-selector-panel">
                             <h3>בחרי משתלם/ת למעקב</h3>
+                            <button class="btn btn-primary btn-sm coordinator-only hidden" onclick="openAddTraineeModal('student', false)" style="margin-bottom: 12px; width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                הוספת משתלם/ת חדש/ה
+                            </button>
                             
                             <!-- Track Filter Group -->
                             <div class="category-filters" id="experience-track-filters" style="margin-bottom: 12px; gap: 4px; flex-wrap: wrap;">
@@ -525,8 +529,14 @@
                         <input type="text" id="trainee-school" required placeholder="למשל: תל השומר, אוניברסיטת תל אביב">
                     </div>
                     <div class="form-group">
-                        <label for="trainee-instructor">מדריכה קלינית מלווה:</label>
+                        <label for="trainee-instructor">מדריכה קלינית מלווה 1:</label>
                         <select id="trainee-instructor">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="trainee-instructor2">מדריכה קלינית מלווה 2 (אופציונלי):</label>
+                        <select id="trainee-instructor2">
                             <!-- Populated dynamically -->
                         </select>
                     </div>
@@ -558,16 +568,27 @@
                         <input type="text" id="edit-trainee-name" required placeholder="למשל: שירה כהן">
                     </div>
                     <div class="form-group">
-                        <label>מסלול הדרכה:</label>
-                        <input type="text" id="edit-trainee-track-display" readonly disabled style="background-color: var(--neutral-light-gray); cursor: not-allowed; font-weight: bold;">
+                        <label for="edit-trainee-track">מסלול הדרכה:</label>
+                        <select id="edit-trainee-track" required>
+                            <option value="nurse">אחות חדשה (קליטה מלאה)</option>
+                            <option value="advanced">על בסיסי</option>
+                            <option value="intern">סטודנט - סטאז'</option>
+                            <option value="student">סטודנט - התנסות קצרה</option>
+                        </select>
                     </div>
                     <div class="form-group">
                         <label for="edit-trainee-school">בית ספר / מוסד לימודים:</label>
                         <input type="text" id="edit-trainee-school" required placeholder="למשל: תל השומר, אוניברסיטת תל אביב">
                     </div>
                     <div class="form-group">
-                        <label for="edit-trainee-instructor">מדריכה קלינית מלווה:</label>
+                        <label for="edit-trainee-instructor">מדריכה קלינית מלווה 1:</label>
                         <select id="edit-trainee-instructor">
+                            <!-- Populated dynamically -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-trainee-instructor2">מדריכה קלינית מלווה 2 (אופציונלי):</label>
+                        <select id="edit-trainee-instructor2">
                             <!-- Populated dynamically -->
                         </select>
                     </div>
@@ -577,9 +598,12 @@
                     </div>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal('modal-edit-trainee')">ביטול</button>
-                <button class="btn btn-primary" onclick="saveEditedTrainee()">שמירה</button>
+            <div class="modal-footer" style="display: flex; justify-content: space-between; align-items: center; width: 100%;">
+                <button class="btn btn-danger" onclick="deleteTraineeFromEditModal()">מחיקת משתלם/ת</button>
+                <div style="display: flex; gap: 8px;">
+                    <button class="btn btn-secondary" onclick="closeModal('modal-edit-trainee')">ביטול</button>
+                    <button class="btn btn-primary" onclick="saveEditedTrainee()">שמירה</button>
+                </div>
             </div>
         </div>
     </div>

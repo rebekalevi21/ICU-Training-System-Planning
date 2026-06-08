@@ -461,11 +461,11 @@ function renderDashboard() {
     document.getElementById("stat-total-trainees").innerText = totalTrainees;
     
     // Active Instructors (instructors currently assigned to an active trainee)
-    const activeInstructorIds = new Set(
-        database.trainees
-            .filter(t => t.instructorId)
-            .map(t => t.instructorId)
-    );
+    const activeInstructorIds = new Set();
+    database.trainees.forEach(t => {
+        if (t.instructorId) activeInstructorIds.add(t.instructorId);
+        if (t.instructorId2) activeInstructorIds.add(t.instructorId2);
+    });
     document.getElementById("stat-active-instructors").innerText = activeInstructorIds.size;
     
     // Overall completion percentage
@@ -515,7 +515,15 @@ function renderDashboard() {
         // Progress Calculation for this trainee
         const progress = calculateTraineeProgress(t);
         const instructor = database.instructors.find(i => i.id === t.instructorId);
-        const instructorName = instructor ? instructor.name : '<span class="text-orange">לא שובצה</span>';
+        const instructor2 = t.instructorId2 ? database.instructors.find(i => i.id === t.instructorId2) : null;
+        let instructorName = '<span class="text-orange">לא שובצה</span>';
+        if (instructor && instructor2) {
+            instructorName = `${instructor.name} / ${instructor2.name}`;
+        } else if (instructor) {
+            instructorName = instructor.name;
+        } else if (instructor2) {
+            instructorName = instructor2.name;
+        }
         
         const trackLabels = {
             nurse: "אחות חדשה",
@@ -604,16 +612,23 @@ function tryCompleteOrDeleteTrainee(id) {
     }
     
     if (confirm(confirmMsg)) {
-        if (isComplete && trainee.instructorId) {
-            // Increment instructor's count
-            const inst = database.instructors.find(i => i.id === trainee.instructorId);
-            if (inst) {
-                inst.historyCount = (inst.historyCount || 0) + 1;
-                
-                // Also increment current month
-                const currentMonth = new Date().toISOString().substring(0, 7); // YYYY-MM
-                if (!inst.monthlyCounts) inst.monthlyCounts = {};
-                inst.monthlyCounts[currentMonth] = (inst.monthlyCounts[currentMonth] || 0) + 1;
+        if (isComplete) {
+            const currentMonth = new Date().toISOString().substring(0, 7); // YYYY-MM
+            if (trainee.instructorId) {
+                const inst = database.instructors.find(i => i.id === trainee.instructorId);
+                if (inst) {
+                    inst.historyCount = (inst.historyCount || 0) + 1;
+                    if (!inst.monthlyCounts) inst.monthlyCounts = {};
+                    inst.monthlyCounts[currentMonth] = (inst.monthlyCounts[currentMonth] || 0) + 1;
+                }
+            }
+            if (trainee.instructorId2) {
+                const inst2 = database.instructors.find(i => i.id === trainee.instructorId2);
+                if (inst2) {
+                    inst2.historyCount = (inst2.historyCount || 0) + 1;
+                    if (!inst2.monthlyCounts) inst2.monthlyCounts = {};
+                    inst2.monthlyCounts[currentMonth] = (inst2.monthlyCounts[currentMonth] || 0) + 1;
+                }
             }
         }
         
@@ -829,7 +844,15 @@ function renderChecklistForTrainee(traineeId, panelId) {
     if (!trainee) return;
     
     const instructor = database.instructors.find(i => i.id === trainee.instructorId);
-    const instructorName = instructor ? instructor.name : "טרם שובצה מדריכה קלינית";
+    const instructor2 = trainee.instructorId2 ? database.instructors.find(i => i.id === trainee.instructorId2) : null;
+    let instructorName = "טרם שובצה מדריכה קלינית";
+    if (instructor && instructor2) {
+        instructorName = `${instructor.name} ו-${instructor2.name}`;
+    } else if (instructor) {
+        instructorName = instructor.name;
+    } else if (instructor2) {
+        instructorName = instructor2.name;
+    }
     
     const trackLabels = {
         nurse: "אחות חדשה",
@@ -1010,7 +1033,14 @@ function toggleChecklistItem(itemId, isChecked) {
         let signoffName = "";
         if (currentRole === "coordinator") {
             const instructor = database.instructors.find(i => i.id === trainee.instructorId);
-            signoffName = instructor ? instructor.name : "רכזת הדרכה";
+            const instructor2 = trainee.instructorId2 ? database.instructors.find(i => i.id === trainee.instructorId2) : null;
+            if (instructor && instructor2) {
+                signoffName = `${instructor.name} ו-${instructor2.name}`;
+            } else if (instructor) {
+                signoffName = instructor.name;
+            } else {
+                signoffName = "רכזת הדרכה";
+            }
         } else {
             signoffName = "מילוי עצמי (אחות חדשה)";
         }
@@ -1038,25 +1068,30 @@ function openEditTraineeModal(id) {
     document.getElementById("edit-trainee-school").value = trainee.school;
     document.getElementById("edit-trainee-start-date").value = trainee.startDate;
     
-    const trackLabels = {
-        nurse: "אחות חדשה (קליטה מלאה)",
-        advanced: "על בסיסי",
-        intern: "סטודנט - סטאז'",
-        student: "סטודנט - התנסות קצרה"
-    };
-    document.getElementById("edit-trainee-track-display").value = trackLabels[trainee.track] || trainee.track;
+    document.getElementById("edit-trainee-track").value = trainee.track;
     
     const select = document.getElementById("edit-trainee-instructor");
-    select.innerHTML = '<option value="">ללא מדריכה קלינית מלווה</option>';
+    select.innerHTML = '<option value="">ללא מדריכה קלינית מלווה 1</option>';
+    
+    const select2 = document.getElementById("edit-trainee-instructor2");
+    select2.innerHTML = '<option value="">ללא מדריכה שנייה</option>';
     
     database.instructors.forEach(inst => {
         const option = document.createElement("option");
         option.value = inst.id;
         option.innerText = inst.name;
+        
+        const option1 = option.cloneNode(true);
         if (inst.id === trainee.instructorId) {
-            option.selected = true;
+            option1.selected = true;
         }
-        select.appendChild(option);
+        select.appendChild(option1);
+        
+        const option2 = option.cloneNode(true);
+        if (inst.id === trainee.instructorId2) {
+            option2.selected = true;
+        }
+        select2.appendChild(option2);
     });
     
     openModal("modal-edit-trainee");
@@ -1066,7 +1101,9 @@ function saveEditedTrainee() {
     const id = document.getElementById("edit-trainee-id").value;
     const name = document.getElementById("edit-trainee-name").value;
     const school = document.getElementById("edit-trainee-school").value;
+    const track = document.getElementById("edit-trainee-track").value;
     const instructorId = document.getElementById("edit-trainee-instructor").value;
+    const instructorId2 = document.getElementById("edit-trainee-instructor2").value;
     const startDate = document.getElementById("edit-trainee-start-date").value;
     
     if (!name || !school || !startDate) {
@@ -1080,14 +1117,72 @@ function saveEditedTrainee() {
         return;
     }
     
+    const oldTrack = trainee.track;
+    if (track !== oldTrack) {
+        if (confirm("שינוי מסלול ההדרכה יאפס את צ'קליסט המיומנויות של המשתלם/ת. האם להמשיך?")) {
+            trainee.track = track;
+            // Re-initialize checklist
+            const trackTemplate = CHECKLIST_TEMPLATES[track];
+            const checklist = {};
+            if (trackTemplate) {
+                Object.keys(trackTemplate).forEach(cat => {
+                    trackTemplate[cat].forEach(item => {
+                        checklist[item.id] = { checked: false };
+                    });
+                });
+            }
+            trainee.checklist = checklist;
+            // Reset active category
+            const categories = Object.keys(trackTemplate || {});
+            if (categories.length > 0) {
+                currentChecklistCategory = categories[0];
+            }
+            
+            // Switch tabs if necessary
+            if (track === "nurse") {
+                currentNurseId = trainee.id;
+                currentTab = "onboarding";
+            } else {
+                currentStudentId = trainee.id;
+                currentTab = "experiences";
+            }
+        } else {
+            // Keep old track value in UI and abort saving
+            document.getElementById("edit-trainee-track").value = oldTrack;
+            return;
+        }
+    }
+    
     trainee.name = name;
     trainee.school = school;
     trainee.instructorId = instructorId || null;
+    trainee.instructorId2 = instructorId2 || null;
     trainee.startDate = startDate;
     
     saveToLocalStorage();
     closeModal("modal-edit-trainee");
     renderAll();
+}
+
+function deleteTraineeFromEditModal() {
+    const id = document.getElementById("edit-trainee-id").value;
+    const trainee = database.trainees.find(t => t.id === id);
+    if (!trainee) return;
+    
+    if (confirm(`האם את בטוחה שברצונך למחוק את ${trainee.name} מתהליך ההדרכה?`)) {
+        database.trainees = database.trainees.filter(t => t.id !== id);
+        
+        if (currentNurseId === id) {
+            currentNurseId = null;
+        }
+        if (currentStudentId === id) {
+            currentStudentId = null;
+        }
+        
+        saveToLocalStorage();
+        closeModal("modal-edit-trainee");
+        renderAll();
+    }
 }
 
 // ================= TAB 3: INSTRUCTORS MANAGEMENT (COORDINATOR ONLY) =================
@@ -1106,7 +1201,7 @@ function renderInstructors() {
         const tr = document.createElement("tr");
         
         // Find if this instructor is currently mentoring someone active
-        const traineesTaught = database.trainees.filter(t => t.instructorId === inst.id);
+                const traineesTaught = database.trainees.filter(t => t.instructorId === inst.id || t.instructorId2 === inst.id);
         let currentTraineesHtml = "";
         
         if (traineesTaught.length > 0) {
@@ -1146,7 +1241,7 @@ function deleteInstructor(id) {
     if (!inst) return;
     
     // Check if currently teaching
-    const isTeaching = database.trainees.some(t => t.instructorId === id);
+    const isTeaching = database.trainees.some(t => t.instructorId === id || t.instructorId2 === id);
     if (isTeaching) {
         alert(`לא ניתן למחוק את ${inst.name} מכיוון שהיא משובצת כעת להדרכה פעילה. הסירי תחילה את השיבוץ שלה.`);
         return;
@@ -1269,21 +1364,27 @@ function closeModal(modalId) {
 }
 
 // Open Add Trainee Modal and pre-populate instructors
-function openAddTraineeModal(defaultTrack) {
+function openAddTraineeModal(defaultTrack, disableTrackDropdown = true) {
     const select = document.getElementById("trainee-instructor");
-    select.innerHTML = '<option value="">ללא מדריכה קלינית מלווה</option>';
+    select.innerHTML = '<option value="">ללא מדריכה קלינית מלווה 1</option>';
+    
+    const select2 = document.getElementById("trainee-instructor2");
+    select2.innerHTML = '<option value="">ללא מדריכה שנייה</option>';
     
     database.instructors.forEach(inst => {
         const option = document.createElement("option");
         option.value = inst.id;
         option.innerText = inst.name;
         select.appendChild(option);
+        
+        const option2 = option.cloneNode(true);
+        select2.appendChild(option2);
     });
     
     const trackSelect = document.getElementById("trainee-track");
     if (defaultTrack) {
         trackSelect.value = defaultTrack;
-        trackSelect.disabled = true;
+        trackSelect.disabled = disableTrackDropdown;
     } else {
         trackSelect.value = "nurse";
         trackSelect.disabled = false;
@@ -1297,6 +1398,7 @@ function saveTrainee() {
     const track = document.getElementById("trainee-track").value;
     const school = document.getElementById("trainee-school").value;
     const instructorId = document.getElementById("trainee-instructor").value;
+    const instructorId2 = document.getElementById("trainee-instructor2").value;
     const startDate = document.getElementById("trainee-start-date").value;
     
     if (!name || !school || !startDate) {
@@ -1322,6 +1424,7 @@ function saveTrainee() {
         track,
         school,
         instructorId: instructorId || null,
+        instructorId2: instructorId2 || null,
         startDate,
         checklist,
         evaluation: null
