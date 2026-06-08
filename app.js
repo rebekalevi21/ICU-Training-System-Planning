@@ -132,6 +132,13 @@ const CHECKLIST_TEMPLATES = {
             { id: "adv-1", title: "ניטור המודינמי מתקדם", desc: "הבנת מדדי Swan-Ganz, תפוקת לב (CO), התנגדות כלי דם (SVR), ושימוש ב-FloTrac." },
             { id: "adv-2", title: "טיפול תחליפי כלייתי רציף (CRRD / Prismaflex)", desc: "הרכבת סט פילטר, כיול המכשיר, הגדרת זרימות וטיפול בסתימת פילטר/קרישה." },
             { id: "adv-3", title: "עקרונות תמיכת ECMO במחלקה", desc: "מעקב זרימות, ניטור נוגדי קרישה (ACT/APTT), תגובה במקרה של ניתוק או כשל במשאבה." }
+        ],
+        "רובריקות חובה השתלמות": [
+            { id: "adv-req-1", title: "חוזה הדרכה", desc: "תיאום ציפיות וחתימה על חוזה הדרכה קלינית מול המדריכה." },
+            { id: "adv-req-2", title: "יום ראשון להשתלמות - אוריינטציה", desc: "היכרות עם מבנה המחלקה, נהלי בטיחות ורמות ניטור גבוהות." },
+            { id: "adv-req-3", title: "הערכת אמצע", desc: "שיחת משוב חצי-תקופתית על קצב ההתקדמות ומיומנויות מתקדמות." },
+            { id: "adv-req-4", title: "דיון קליני / מטלת סיום השתלמות", desc: "הצגת מקרה מורכב או השתתפות בדיון קליני מתקדם." },
+            { id: "adv-req-5", title: "הערכת סיום ההשתלמות", desc: "שיחת משוב מסכמת וחתימה על דוח הערכה דיגיטלי במערכת." }
         ]
     },
     intern: {
@@ -139,6 +146,13 @@ const CHECKLIST_TEMPLATES = {
             { id: "intern-1", title: "ניהול וניטור סימנים חיוניים", desc: "חיבור מוניטור, הגדרת גבולות אזעקה והבנת עקומות אק\"ג, סטורציה ולחץ דם פולשני." },
             { id: "intern-2", title: "הכנת סביבת המטופל הקריטי", desc: "בדיקת תקינות מערכות שאיבה (סקשיין), מיכל חמצן, ערכת החייאה ומנשם במצב Standby." },
             { id: "intern-3", title: "תרגול דיווח והצגת מקרה בסבב", desc: "למידה והצגת חולה מורכב לפי שיטת מערכות גוף (נוירולוגי, נשימתי, קרדיווסקולרי, כליות)." }
+        ],
+        "רובריקות חובה סטאז'": [
+            { id: "intern-req-1", title: "חוזה הדרכה", desc: "תיאום ציפיות וחתימה על חוזה הדרכה קלינית מול המדריכה." },
+            { id: "intern-req-2", title: "יום ראשון לסטאז' - אוריינטציה", desc: "היכרות עם מבנה המחלקה, צוות, נהלי בטיחות ויחידת המטופל." },
+            { id: "intern-req-3", title: "הערכת אמצע", desc: "שיחת משוב חצי-תקופתית על קצב הקליטה והתקדמות המיומנויות." },
+            { id: "intern-req-4", title: "דיון קליני / מטלת סיום סטאז'", desc: "הצגת מקרה חולה או מטלה קלינית מסכמת מול הצוות." },
+            { id: "intern-req-5", title: "הערכת סיום הסטאז'", desc: "שיחת משוב מסכמת וחתימה על דוח הערכה דיגיטלי במערכת." }
         ]
     },
     student: {
@@ -146,6 +160,13 @@ const CHECKLIST_TEMPLATES = {
             { id: "stud-1", title: "היכרות עם סביבת טיפול נמרץ", desc: "הבנת ההבדל בין מחלקה רגילה לטיפול נמרץ, מעורבות הצוות הרב-מקצועי ושמירה על פרטיות המטופל." },
             { id: "stud-2", title: "עזרה בסיסית בטיפול סיעודי בחולה מורדם ומונשם", desc: "תרגול רחצה, טיפול פה למניעת דלקת ריאות (VAP), שינוי תנוחות ומניעת פצעי לחץ." },
             { id: "stud-3", title: "מעקב ומדידות בסיסיות", desc: "ספירת מאזן נוזלים, קריאת מדידת שתן שעתית ומעקב הפרשות מנקזים." }
+        ],
+        "רובריקות חובה התנסות": [
+            { id: "stud-req-1", title: "חוזה הדרכה", desc: "תיאום ציפיות וחתימה על חוזה הדרכה קלינית מול המדריכה." },
+            { id: "stud-req-2", title: "יום ראשון להתנסות - אוריינטציה", desc: "היכרות עם מבנה המחלקה, נהלי בטיחות ויחידת המטופל." },
+            { id: "stud-req-3", title: "הערכת אמצע", desc: "שיחת משוב חצי-תקופתית על קצב ההתקדמות בהתנסות." },
+            { id: "stud-req-4", title: "מטלת סיום התנסות", desc: "הגשה או ביצוע של מטלת סיום התנסות קלינית." },
+            { id: "stud-req-5", title: "הערכת סיום ההתנסות", desc: "שיחת משוב מסכמת וחתימה על דוח הערכה דיגיטלי במערכת." }
         ]
     }
 };
@@ -183,7 +204,9 @@ const INITIAL_TRAINEES = [
         checklist: {
             "intern-1": { checked: true, signoffDate: "2026-05-22", instructorName: "יונת נקי" },
             "intern-2": { checked: true, signoffDate: "2026-05-25", instructorName: "יונת נקי" },
-            "intern-3": { checked: false }
+            "intern-3": { checked: false },
+            "intern-req-1": { checked: true, signoffDate: "2026-05-20", instructorName: "יונת נקי" },
+            "intern-req-2": { checked: true, signoffDate: "2026-05-20", instructorName: "יונת נקי" }
         },
         evaluation: null
     },
@@ -197,16 +220,17 @@ const INITIAL_TRAINEES = [
         checklist: {
             "adv-1": { checked: true, signoffDate: "2026-04-20", instructorName: "שרה אוזן" },
             "adv-2": { checked: false },
-            "adv-3": { checked: false }
+            "adv-3": { checked: false },
+            "adv-req-1": { checked: true, signoffDate: "2026-04-15", instructorName: "שרה אוזן" }
         },
         evaluation: null
     }
 ];
 
-// Force migrate local storage for trainees to update with the new 69-item structure
-if (localStorage.getItem("icu_trainees_migrated_v5") !== "true") {
+// Force migrate local storage for trainees to update with the new 69-item structure and rubrics
+if (localStorage.getItem("icu_trainees_migrated_v6") !== "true") {
     localStorage.setItem("icu_trainees", JSON.stringify(INITIAL_TRAINEES));
-    localStorage.setItem("icu_trainees_migrated_v5", "true");
+    localStorage.setItem("icu_trainees_migrated_v6", "true");
 }
 
 // ================= GLOBAL STATE =================
