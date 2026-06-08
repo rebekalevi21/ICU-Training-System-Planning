@@ -1,7 +1,7 @@
 // ================= INITIAL STATE & DATA TEMPLATES =================
 
 // Passcode for Training Coordinator access
-const COORDINATOR_PASSCODE = "1234";
+const COORDINATOR_PASSCODE = "2010";
 
 // Initial mock data to populate localStorage if empty
 const INITIAL_INSTRUCTORS = [
